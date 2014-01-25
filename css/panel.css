@@ -1,0 +1,4 @@
+#wti_panel { border:3px solid blue; position:fixed; top:0; right:0; background:white; width:15%; height:100%; overflow: scroll; background-image:url('chrome-extension://__MSG_@@extension_id__/icon.png');}
+#wti_panel_wrap { position:relative; }
+#wti_panel .row { max-width:100%; border:2px solid red; }
+
