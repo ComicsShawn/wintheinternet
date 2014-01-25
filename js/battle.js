@@ -33,6 +33,7 @@ function startBattle(e,mdata){
 				//setup battle system
 				bSystem = new BattleSystem(mdata, $("#msg-area"));
 				$("#btnAttack").click(function() { bSystem.doAction("attack") });
+				$("#btnDefend").click(function() { bSystem.doAction("defend") });
 			});
 	});
 	console.log("Enemy Player Loaded.");
@@ -46,11 +47,11 @@ function BattleSystem(mData, mArea) {
 	this.messageArea = mArea;
 
 	this.extraMonsterData = {
-		guarding: false
+		guard: 1
 	};
 
 	this.extraPlayerData = {
-		guarding: false
+		guard: 1
 	}; // status stuff
 
 	//utility function to both add a message and scroll the log down
@@ -93,6 +94,9 @@ function BattleSystem(mData, mArea) {
 	//Well, the monster needs to be able to do some things too, you kno
 	this.monsterTurn = function() {
 		var selectedChoice = Math.random();
+
+		//guard reset
+		this.extraMonsterData.guard = 1;
 		
 		if(selectedChoice < .5) {
 			me.mAttack();
@@ -104,7 +108,8 @@ function BattleSystem(mData, mArea) {
 	}
 
 	this.mAttack = function() {
-		var diff = me.monsterData.atk - $("#characterDEF").html();
+		var diff = me.monsterData.atk - Math.floor( $("#cDEF").html() * me.extraPlayerData.guard );
+		if(diff < 0) diff = 0;
 		var newHP = CharHP() - diff;
 		CharHP(newHP);
 		me.messageArea.postBattleMethod("<div>"+ me.monsterData.name + " hits for a rad " + diff + " damage!</div>");
@@ -113,7 +118,7 @@ function BattleSystem(mData, mArea) {
 	}
 
 	this.mDefend = function() {
-		me.extraMonsterData.guarding = true;
+		me.extraMonsterData.guard = 1.5;
 		me.messageArea.postBattleMethod("<div>"+ me.monsterData.name + " curls up into a little ball.</div>");
 
 	}
@@ -126,8 +131,13 @@ function BattleSystem(mData, mArea) {
 	// like cleanup and set current turn
 	this.doAction = function(action) {
 
+		//guard reset
+		this.extraPlayerData.guard = 1;
+
 		if(action=="attack") {
 			me.attack();
+		} else if (action == "defend") {
+			me.defend();
 		}
 
 		me.curTurn = "monster";
@@ -135,7 +145,11 @@ function BattleSystem(mData, mArea) {
 	}
 
 	this.attack = function() {
-		var diff = $("#characterATK").html() - me.monsterData.def;
+		
+		console.log( $("#cATK").html(), me.monsterData.def)
+		var diff = $("#cATK").html() - Math.floor( me.monsterData.def * me.extraMonsterData.guard );
+		
+		if(diff < 0) diff = 0;
 		me.monsterData.hp -= diff;
 
 		console.log(me.messageArea);
@@ -143,7 +157,8 @@ function BattleSystem(mData, mArea) {
 	}
 
 	this.defend = function() {
-
+		this.extraPlayerData.guard = 1.5;
+		me.messageArea.postBattleMethod("<div>You cower in a handy corner");
 	}
 
 
