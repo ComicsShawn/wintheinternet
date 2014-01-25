@@ -25,6 +25,37 @@ function animateMonster(monster,height,width){
     
 };
 
+function adjustProgressBar(stat,type,amt){
+	var cv = parseInt($('#c'+stat).html());
+	if(type=='+')
+		cv += parseInt(amt);
+	else
+		cv -= parseInt(amt);
+	
+	var cmax = parseInt($('#c'+stat+'M').html());
+	var cp = (cv / cmax) * 100;
+	if(cv > cmax) cv = cmax;
+	//Animate the change, adjust the progress bars
+	$('#c'+stat+'B').attr("aria-valuenow",cv).animate({width:cp+'%'});
+	$('#c'+stat).html(cv);
+}
+
+function detectScrollDirection() {
+
+	st = window.pageYOffset;
+
+	if (st > lastScrollTop) {
+		direction = "down";
+	} else {
+		direction = "up";
+	}
+
+	lastScrollTop = st;
+
+	return direction;
+
+}
+
 function calcSpeed(prev, next) {
     var x = Math.abs(prev[1] - next[1]);
     var y = Math.abs(prev[0] - next[0]);

@@ -1,11 +1,24 @@
 debug = true;
 b = $('body');
+var h = $(document).height();
+
+//Scroll distance tracker data
+s = '';
+var lastScrollTop = 0,st,direction,startScroll=0,toHandler,endScroll=0,xpScroll=0;
+var maxXP = h/1000;
 
 /* ******************
 Function to hide all the miscellaneous goodies on the screen
 *********************/
 function hideAll(){
 	$('.m_monster').hide();
+}
+
+/* *************
+FUNCTION TO GIVE XP FOR SCROLLING
+****************/
+function addScrollXP(s){
+	adjustProgressBar('XP','+',1);
 }
 
 /* *******************
@@ -159,6 +172,30 @@ function bindActions(){
 	$('#hop').click(function(){ 
 		$('#wti_panel').toggleClass("active");  
 		$('#iconrow .fa').toggleClass("fa-chevron-left fa-chevron-right");
+	});
+	var dir = dist = '';
+	var xpMark = Math.floor(h / 1000);
+	var lastUp = 0;
+	$(document).scroll(function(){
+		var dir = detectScrollDirection(); //Located in utils
+		if(dir=="down"){
+			console.log("Going Down");
+			if (startScroll==0) {
+				startScroll = $(window).scrollTop();
+			} else {
+				endScroll = $(window).scrollTop();
+			}
+		}
+		dist = (endScroll-startScroll);
+		console.log("Total Distance: "+dist+ " Height:"+h+" XPScroll:"+xpScroll);
+		if(xpScroll<h&&endScroll!=0){
+			if(Math.floor(h/xpScroll)>(lastUp*1000)){
+				addScrollXP(dist);
+				lastUp++;
+			}
+			xpScroll += parseInt(dist);
+			startScroll = endScroll;
+		}
 	});
 }
 
