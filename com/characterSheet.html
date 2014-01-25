@@ -1,5 +1,13 @@
 <div id="wti_panel_wrap">
 	<div class="container">
+		<div id="titleBar" class="row">
+			<div class="col-sm-12">
+				<h1 id="characterName"></h1>
+			</div>
+			<div class="col-sm-12">
+				Level <span id="characterLevel"></div> <span id="characterClass"></span>
+			</div>
+		</div>
 		<div class="row">
 			<div id="characterIcon" class="col-sm-12">
 				<img id="character" class="img-rounded img-responsive" src="" />
@@ -7,25 +15,39 @@
 		</div>
 		<div id="characterStatus" class="row">
 			<div id="characterHealth" class="col-sm-12">
-				Health:
+				Health (<span id="cHP"></span>/<span id="cHPM"></span>):
 				<div class="progress">
 				  <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
 				  </div>
 				</div>
 			</div>
 			<div id="characterMana" class="col-sm-12">
-				Mana:
+				Mana (<span id="cMP"></span>/<span id="cMPM"></span>):
 				<div class="progress">
 				  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
 				  </div>
 				</div>
 			</div>
 			<div id="characterExperience" class="col-sm-12">
-				Experience: 
+				Experience (<span id="cXP"></span>/<span id="cXPM"></span>): 
 				<div class="progress">
 				  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
 				  </div>
 				</div>
+			</div>
+		</div>
+		<div id="charStats" class="row">
+			<div class="col-sm-3">
+				Attack<br/><span id="characterATK"></span>
+			</div>
+			<div class="col-sm-3">
+				Magic<br/><span id="characterMAG"></span>
+			</div>
+			<div class="col-sm-3">
+				Defense<br/><span id="characterDEF"></span>
+			</div>
+			<div class="col-sm-3">
+				Speed<br/><span id="characterSPD"></span>
 			</div>
 		</div>
 		<div id="characterItems" class="row">

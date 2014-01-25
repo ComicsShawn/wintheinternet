@@ -12,7 +12,49 @@ function hideAll(){
 Function to load all character stats, including img, health, items, etc
 *********************/
 function loadStats(){
-	$("#character").attr('src',chrome.extension.getURL("img/sprites/default.gif"));	
+	console.log("Load player character");
+	
+	$.ajax({
+	  url: chrome.extension.getURL('data/player.json'),
+	  dataType: 'json',
+	  contentType: "application/json; charset=utf-8",
+	  success: function (data) {
+		console.log("RETURN PLAYER DATA");
+		console.log(data);
+		var pimg = data['img'];
+		var currentHP = (data['hp']/data['maxhp'])*100;
+		var currentMP = (data['mp']/data['maxmp'])*100;
+		var currentXP = (data['hp']/data['maxhp'])*100;
+		
+		$("#characterName").html(data['name']);
+		$("#characterLevel").html(data['level']);
+		$("#characterClass").html(data['class']);
+		
+		/* Hit Point Bars */
+		$("#cHP").html(data['hp']);
+		$("#cHPM").html(data['maxhp']);
+		$("#characterHealth > .progress > .progress-bar").attr("aria-valuenow",data["hp"]).attr("aria-valuemax",data["maxhp"]).css("width",currentHP+"%");
+		$("#cMP").html(data['mp']);
+		$("#cMPM").html(data['maxmp']);
+		$("#characterMana > .progress > .progress-bar").attr("aria-valuenow",data["mp"]).attr("aria-valuemax",data["maxmp"]).css("width",currentMP+"%");
+		$("#cXP").html(data['xp']);
+		$("#cXPM").html(data['maxxp']);
+		$("#characterExperience > .progress > .progress-bar").attr("aria-valuenow",data["xp"]).attr("aria-valuemax",data["maxxp"]).css("width",currentXP+"%");
+		
+		/* Character Stats */
+		$("#characterATK").html(data['atk']);
+		$("#characterMAG").html(data['mag']);
+		$("#characterDEF").html(data['def']);
+		$("#characterSPD").html(data['spd']);
+		
+		$("#character").attr('src',chrome.extension.getURL("img/sprites/"+pimg));	
+	  	  
+	  }, 
+	  error: function (data) {
+			console.log("Player Load Failed");
+			console.log(msg);
+		} 
+	});  
 }
 
 
