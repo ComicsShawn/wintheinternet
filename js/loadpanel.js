@@ -1,11 +1,24 @@
 debug = true;
 b = $('body');
+var h = $(document).height();
+
+//Scroll distance tracker data
+s = '';
+var lastScrollTop = 0,st,direction,startScroll=0,toHandler,endScroll=0,xpScroll=0;
+var maxXP = h/1000;
 
 /* ******************
 Function to hide all the miscellaneous goodies on the screen
 *********************/
 function hideAll(){
 	$('.m_monster').hide();
+}
+
+/* *************
+FUNCTION TO GIVE XP FOR SCROLLING
+****************/
+function addScrollXP(s){
+	adjustProgressBar('XP','+',1);
 }
 
 /* *******************
@@ -25,6 +38,7 @@ function loadStats(){
 		var currentHP = (data['hp']/data['maxhp'])*100;
 		var currentMP = (data['mp']/data['maxmp'])*100;
 		var currentXP = (data['xp']/data['maxxp'])*100;
+		var currentCB = (data['cb']/data['maxcb'])*100;
 		
 		$("#characterName").html(data['name']);
 		$("#characterLevel").html(data['level']);
@@ -40,6 +54,9 @@ function loadStats(){
 		$("#cXP").html(data['xp']);
 		$("#cXPM").html(data['maxxp']);
 		$("#characterExperience > .progress > .progress-bar").attr("aria-valuenow",data["xp"]).attr("aria-valuemax",data["maxxp"]).css("width",currentXP+"%");
+		$("#cCB").html(data['cb']);
+		$("#cCBM").html(data['maxcb']);
+		$("#characterCoinbits > .progress > .progress-bar").attr("aria-valuenow",data["CB"]).attr("aria-valuemax",data["maxCB"]).css("width",currentCB+"%");
 		
 		/* Character Stats */
 		$("#cATK").html(data['atk']);
@@ -150,10 +167,35 @@ function checkUrl(){
 	}
 }
 
-function bindBtns(){
+function bindActions(){
+	/* Bind the Actions */
 	$('#hop').click(function(){ 
 		$('#wti_panel').toggleClass("active");  
 		$('#iconrow .fa').toggleClass("fa-chevron-left fa-chevron-right");
+	});
+	var dir = dist = '';
+	var xpMark = Math.floor(h / 1000);
+	var lastUp = 0;
+	$(document).scroll(function(){
+		var dir = detectScrollDirection(); //Located in utils
+		if(dir=="down"){
+			console.log("Going Down");
+			if (startScroll==0) {
+				startScroll = $(window).scrollTop();
+			} else {
+				endScroll = $(window).scrollTop();
+			}
+		}
+		dist = (endScroll-startScroll);
+		console.log("Total Distance: "+dist+ " Height:"+h+" XPScroll:"+xpScroll);
+		if(xpScroll<h&&endScroll!=0){
+			if(Math.floor(h/xpScroll)>(lastUp*1000)){
+				addScrollXP(dist);
+				lastUp++;
+			}
+			xpScroll += parseInt(dist);
+			startScroll = endScroll;
+		}
 	});
 }
 
@@ -163,7 +205,7 @@ $(document).ready(function(){
 	$.get(chrome.extension.getURL("com/characterSheet.html"), function(data){
 		p.html(data);
 		loadStats();
-		bindBtns();
+		bindActions();
 		checkUrl();
 	});
 	//Initialize Tooltips
