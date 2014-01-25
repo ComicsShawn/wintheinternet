@@ -99,7 +99,9 @@ function loadStats(){
 		$('#characterItems .item').click(function(e){ useItem(e,$(this).attr('id'),$(this).parent('div').attr('id')); });
 		//Initialize Tooltips
 		$('.tip').tooltip({html:true,container:'#wti_panel'});
-		$("#character").attr('src',chrome.extension.getURL("img/sprites/"+pimg));	
+		
+		$("#character").attr('src',chrome.extension.getURL("img/sprites/"+pimg));
+		$("#avatar > img").attr('src',chrome.extension.getURL("img/sprites/"+pimg));	
 	  	  
 	  }, 
 	  error: function (data) {
@@ -173,6 +175,33 @@ function bindActions(){
 		$('#wti_panel').toggleClass("active");  
 		$('#iconrow .fa').toggleClass("fa-chevron-left fa-chevron-right");
 	});
+	
+	/* tClouds - Cursor Bind */
+	var mX = 0;
+	var img;
+	//^[\w,\s-]+\.[A-Za-z]{3}$
+	var re = /\-[a-z]{2}\./;
+	var av = $('#avatar > img');
+	$(document).mousemove(function(e) {
+		img = av.attr('src');
+		if(e.pageX < mX){
+			img = img.replace(re,"-lt.");
+			av.attr('src',img);
+		}else if(e.pageX > mX){
+			img = img.replace(re,"-rt.");
+			av.attr('src',img);
+		}else{
+			img = img.replace(re,"-fr.");
+			av.attr('src',img);
+		}
+		mX = e.pageX;
+		av.offset({
+			left: e.pageX,
+			top: e.pageY + 20
+		});
+	});
+	
+	/* Scroll Functions */
 	var dir = dist = '';
 	var xpMark = Math.floor(h / 1000);
 	var lastUp = 0;
@@ -200,7 +229,7 @@ function bindActions(){
 }
 
 $(document).ready(function(){
-	b.append("<div id='wti_panel'></div>");
+	b.append("<div id='wti_panel'></div><div id='avatar'><img class='img-responsive'/></div>");
 	var p = $('#wti_panel');
 	$.get(chrome.extension.getURL("com/characterSheet.html"), function(data){
 		p.html(data);

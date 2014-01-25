@@ -2,7 +2,7 @@
 	"name": "Speedo", 
 	"level": 1,
 	"class": "Warrior",
-	"img": "default.gif",
+	"img": "knight-fr.png",
 	"maxhp":25,
 	"maxmp":10,
 	"maxxp":25,
@@ -77,12 +77,12 @@
 				},
 			"lh":
 				{ 
-					"name":"Sword", 
+					"name":"Staff", 
 					"descrip": "Whoop some A.", 
 					"boost":"atk,spd",
 					"amount":"+4,-2",
-					"image":"sword.gif",
-					"layer":"sword.gif"
+					"image":"staff.png",
+					"layer":"staff.png"
 				}
 		}
 	

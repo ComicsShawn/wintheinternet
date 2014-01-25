@@ -1,3 +1,4 @@
+
 // Generates random new position
 function makeNewPosition(height,width){
     // Get viewport dimensions (remove the dimension of the div)
