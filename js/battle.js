@@ -34,9 +34,21 @@ function startBattle(e,mdata){
 				bSystem = new BattleSystem(mdata, $("#msg-area"), wb);
 				$("#btnAttack").click(function() { bSystem.doAction("attack") });
 				$("#btnDefend").click(function() { bSystem.doAction("defend") });
+				$("#btnBattleRun").click(function() { bSystem.doAction("run") });
+				$("#btnBattlePray").click(function() { bSystem.doAction("pray") });
 			});
 	});
 	console.log("Enemy Player Loaded.");
+}
+
+function BuildBattleOut() {
+	$('#wti_battle').animate(
+				{ top: - $(window).height()+"px" },
+				1000, 
+				function(){
+					this.remove();
+				}
+	);
 }
 
 function BattleSystem(mData, mArea, bDiv) {
@@ -46,6 +58,8 @@ function BattleSystem(mData, mArea, bDiv) {
 	this.monsterData = mData;
 	this.messageArea = mArea;
 	this.battleDiv = bDiv;
+
+	this.battleOver = false;
 
 	this.extraMonsterData = {
 		guard: 1
@@ -76,13 +90,7 @@ function BattleSystem(mData, mArea, bDiv) {
 		me.messageArea.postBattleMethod("<div><button type='button' class='btn btn-success btn-sm' id='btnBattleExit'>Leave battle forever</button></div>")
 		
 		$("#btnBattleExit").click( function() {
-			me.battleDiv.animate(
-				{ top: - $(window).height()+"px" },
-				1000, 
-				function(){ 
-					this.remove();
-				}
-			);
+			
 		});
 	}
 
@@ -94,11 +102,13 @@ function BattleSystem(mData, mArea, bDiv) {
 	this.checkState = function() {
 		if(me.monsterData.hp <= 0) {
 			me.playerWins();
+			me.battleOver = true;
 			return;
 		}
 
 		if( CharHP <= 0 ) {
 			me.monsterWins();
+			me.battleOver = true;
 			return;
 		}
 
@@ -147,17 +157,32 @@ function BattleSystem(mData, mArea, bDiv) {
 	// like cleanup and set current turn
 	this.doAction = function(action) {
 
-		//guard reset
-		this.extraPlayerData.guard = 1;
+		if( !me.battleOver ) {
+			//guard reset
+			me.extraPlayerData.guard = 1;
 
-		if(action=="attack") {
-			me.attack();
-		} else if (action == "defend") {
-			me.defend();
+			if(action=="attack") {
+				me.attack();
+			} else if (action == "defend") {
+				me.defend();
+			} else if(action == "run") {
+				if( me.run() ) return;
+			}
+
+			me.curTurn = "monster";
+			me.checkState();
 		}
+	}
 
-		me.curTurn = "monster";
-		me.checkState();
+	this.run = function() {
+		if(Math.random() < .95) {
+			me.battleOver = true;
+			BuildBattleOut();
+			return true;
+		} else {
+			me.messageArea.postBattleMethod("<div>You started to run away, but started hiccuping in fear, bringing you to a halt");
+			return false;
+		}
 	}
 
 	this.attack = function() {
