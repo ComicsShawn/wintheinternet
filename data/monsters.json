@@ -11,6 +11,7 @@
         	"def":4,
         	"spd":10,
         	"mag":8,
+            "experience": 6, 
         	"specials": [
         		{ "name":"Wind Cut", "boost":"atk","amount":"50%" }
         	]		
