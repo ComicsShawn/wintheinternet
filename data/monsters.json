@@ -12,7 +12,7 @@
         	"spd":10,
         	"mag":8,
         	"specials": [
-        		{ "name":"Wind Cut", "Boost":"atk","Amount":"50%" }
+        		{ "name":"Wind Cut", "boost":"atk","amount":"50%" }
         	]		
         }
     ]

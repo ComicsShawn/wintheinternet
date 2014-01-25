@@ -19,7 +19,7 @@
   ],
   "content_scripts": [ {
   	"css": [ "css/bootstrap.min.css", "css/font-awesome.min.css", "css/panel.css", "css/monster.css", "css/battle.css" ],
-    "js": [ "js/jquery.min.js", "js/utils.js", "js/loadpanel.js" ],
+    "js": [ "js/jquery.min.js", "js/utils.js", "js/battle.js","js/loadpanel.js" ],
     "matches": [ "http://*/*", "https://*/*"]
   }],
   "manifest_version": 2

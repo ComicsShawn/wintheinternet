@@ -6,7 +6,7 @@ function startBattle(e,mdata){
 	e.preventDefault();
 	b.append("<div id='wti_battle'></div>");
 	var spd = 4000;
-	if(debug) spd = 100;
+	if(debug) spd = 1000;
 	
 	console.log('BATTLE START');
 	console.log(mdata);
