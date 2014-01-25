@@ -31,7 +31,7 @@ function startBattle(e,mdata){
 				$('#enemyName').html(mdata['name']);
 
 				//setup battle system
-				bSystem = new BattleSystem(mdata, $("#msg-area"));
+				bSystem = new BattleSystem(mdata, $("#msg-area"), wb);
 				$("#btnAttack").click(function() { bSystem.doAction("attack") });
 				$("#btnDefend").click(function() { bSystem.doAction("defend") });
 			});
@@ -39,12 +39,13 @@ function startBattle(e,mdata){
 	console.log("Enemy Player Loaded.");
 }
 
-function BattleSystem(mData, mArea) {
+function BattleSystem(mData, mArea, bDiv) {
 
 	//dis moster data
 	//the m is for monster
 	this.monsterData = mData;
 	this.messageArea = mArea;
+	this.battleDiv = bDiv;
 
 	this.extraMonsterData = {
 		guard: 1
@@ -67,7 +68,22 @@ function BattleSystem(mData, mArea) {
 	var me = this;
 
 	this.playerWins = function () {
-		me.messageArea.postBattleMethod("Well dang, you showed " + me.monsterData.name +  " who's the boss");
+		me.messageArea.postBattleMethod("<div>Well dang, you showed " + me.monsterData.name +  " who's the boss</div>");
+		me.messageArea.postBattleMethod("<div>You gained <strong>" + me.monsterData.experience + "</strong> experience!</div>")
+		
+		AddEXP(me.monsterData.experience, me.messageArea)
+
+		me.messageArea.postBattleMethod("<div><button type='button' class='btn btn-success btn-sm' id='btnBattleExit'>Leave battle forever</button></div>")
+		
+		$("#btnBattleExit").click( function() {
+			me.battleDiv.animate(
+				{ top: - $(window).height()+"px" },
+				1000, 
+				function(){ 
+					this.remove();
+				}
+			);
+		});
 	}
 
 	function monsterWins(messageArea) {
@@ -164,6 +180,27 @@ function BattleSystem(mData, mArea) {
 
 }
 
+function AddEXP(amt, messageArea) {
+
+	var curEXP = parseInt( $("#cXP").html() );
+
+	curEXP += amt;
+
+	var xpPercentage = (curEXP/$("#cXPM").html())*100;
+	$("#cXPB").attr("aria-valuenow",curEXP).css("width", xpPercentage+"%");
+
+	if(curEXP > $("#cXPM").html()) {
+		//levelled up
+		var overflow = curEXP - $("#cXPM").html();
+		curEXP = overflow;
+		$("#characterLevel").html( parseInt( $("#characterLevel").html() ) + 1 );
+
+		if(messageArea) {
+			messageArea.postBattleMethod("<div>Aw man, you leveled up! Good work.</div>");
+		}
+	}
+	$("#cXP").html(curEXP);
+}
 
 function CharHP(desiredHP) {
 	if(!desiredHP) {

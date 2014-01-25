@@ -24,7 +24,7 @@ function loadStats(){
 		var pimg = data['img'];
 		var currentHP = (data['hp']/data['maxhp'])*100;
 		var currentMP = (data['mp']/data['maxmp'])*100;
-		var currentXP = (data['hp']/data['maxhp'])*100;
+		var currentXP = (data['xp']/data['maxxp'])*100;
 		
 		$("#characterName").html(data['name']);
 		$("#characterLevel").html(data['level']);
