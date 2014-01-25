@@ -62,8 +62,6 @@ function itemBoost(tgt,boosts){
 }
 
 function destroyItem(slot){
-	$('#'+slot+' > button > img').fadeOut(1000,function(){
-			alert("it gone!");
-	});	
+	$('#'+slot+' > button > img').fadeOut(1000,function(){});	
 	$('#'+slot+' > button').prop('disabled',true).attr('id','');
 }

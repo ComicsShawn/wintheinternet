@@ -24,7 +24,8 @@ function loadStats(){
 		var pimg = data['img'];
 		var currentHP = (data['hp']/data['maxhp'])*100;
 		var currentMP = (data['mp']/data['maxmp'])*100;
-		var currentXP = (data['hp']/data['maxhp'])*100;
+		var currentXP = (data['xp']/data['maxxp'])*100;
+		var currentCB = (data['cb']/data['maxcb'])*100;
 		
 		$("#characterName").html(data['name']);
 		$("#characterLevel").html(data['level']);
@@ -40,6 +41,9 @@ function loadStats(){
 		$("#cXP").html(data['xp']);
 		$("#cXPM").html(data['maxxp']);
 		$("#characterExperience > .progress > .progress-bar").attr("aria-valuenow",data["xp"]).attr("aria-valuemax",data["maxxp"]).css("width",currentXP+"%");
+		$("#cCB").html(data['cb']);
+		$("#cCBM").html(data['maxcb']);
+		$("#characterCoinbits > .progress > .progress-bar").attr("aria-valuenow",data["CB"]).attr("aria-valuemax",data["maxCB"]).css("width",currentCB+"%");
 		
 		/* Character Stats */
 		$("#cATK").html(data['atk']);
@@ -148,7 +152,8 @@ function checkUrl(){
 	}
 }
 
-function bindBtns(){
+function bindActions(){
+	/* Bind the Actions */
 	$('#hop').click(function(){ 
 		$('#wti_panel').toggleClass("active");  
 		$('#iconrow .fa').toggleClass("fa-chevron-left fa-chevron-right");
@@ -161,7 +166,7 @@ $(document).ready(function(){
 	$.get(chrome.extension.getURL("com/characterSheet.html"), function(data){
 		p.html(data);
 		loadStats();
-		bindBtns();
+		bindActions();
 		checkUrl();
 	});
 	//Initialize Tooltips
