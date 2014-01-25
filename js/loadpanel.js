@@ -42,10 +42,10 @@ function loadStats(){
 		$("#characterExperience > .progress > .progress-bar").attr("aria-valuenow",data["xp"]).attr("aria-valuemax",data["maxxp"]).css("width",currentXP+"%");
 		
 		/* Character Stats */
-		$("#characterATK").html(data['atk']);
-		$("#characterMAG").html(data['mag']);
-		$("#characterDEF").html(data['def']);
-		$("#characterSPD").html(data['spd']);
+		$("#cATK").html(data['atk']);
+		$("#cMAG").html(data['mag']);
+		$("#cDEF").html(data['def']);
+		$("#cSPD").html(data['spd']);
 		
 		/* Character Equipment */
 		$("#characterAR > a > img").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['ar']['image']));
@@ -75,8 +75,11 @@ function loadStats(){
 			}
 			$("#charItem-"+i+" > button")
 				.prop("disabled",false)
+				.attr("id",data["items"][i]["id"])
 				.html("<img data-placement='"+p+"' data-original-title='"+data["items"][i]["name"]+"<br/>"+data["items"][i]["descrip"]+"' class='img-responsive tip' src='"+chrome.extension.getURL("img/items/"+data["items"][i]["image"])+"'/>");
 		}
+		//Bind Item Use
+		$('#characterItems .item').click(function(e){ useItem(e,$(this).attr('id')); });
 		//Initialize Tooltips
 		$('.tip').tooltip({html:true,container:'#wti_panel'});
 		$("#character").attr('src',chrome.extension.getURL("img/sprites/"+pimg));	

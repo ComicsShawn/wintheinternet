@@ -9,7 +9,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div id="characterIcon" class="col-sm-12">
+			<div id="characterIcon" class="col-sm-offset-3 col-sm-6">
 				<img id="character" class="img-rounded img-responsive" src="" />
 				<!-- Optional Equip Layers -->
 				<img id="ARL" src=""/>
@@ -21,21 +21,21 @@
 			<div id="characterHealth" class="col-sm-12">
 				Health (<span id="cHP"></span>/<span id="cHPM"></span>):
 				<div class="progress">
-				  <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+				  <div id="cHPB" class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
 				  </div>
 				</div>
 			</div>
 			<div id="characterMana" class="col-sm-12">
 				Mana (<span id="cMP"></span>/<span id="cMPM"></span>):
 				<div class="progress">
-				  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+				  <div id="cMPB" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
 				  </div>
 				</div>
 			</div>
 			<div id="characterExperience" class="col-sm-12">
 				Experience (<span id="cXP"></span>/<span id="cXPM"></span>): 
 				<div class="progress">
-				  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+				  <div id="cXPB" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
 				  </div>
 				</div>
 			</div>
@@ -53,16 +53,16 @@
 		</div>
 		<div id="charStats" class="row">
 			<div class="col-sm-3">
-				Attack<br/><span id="characterATK"></span>
+				Attack<br/><span id="cATK"></span>
 			</div>
 			<div class="col-sm-3">
-				Magic<br/><span id="characterMAG"></span>
+				Magic<br/><span id="cMAG"></span>
 			</div>
 			<div class="col-sm-3">
-				Defense<br/><span id="characterDEF"></span>
+				Defense<br/><span id="cDEF"></span>
 			</div>
 			<div class="col-sm-3">
-				Speed<br/><span id="characterSPD"></span>
+				Speed<br/><span id="cSPD"></span>
 			</div>
 		</div>
 		<div id="characterItems" class="row">

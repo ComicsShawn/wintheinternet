@@ -7,8 +7,8 @@
 	"maxmp":10,
 	"maxxp":25,
 	"xp":0,
-	"hp":25,
-	"mp":8,
+	"hp":15,
+	"mp":3,
 	"atk":8,
 	"def":6,
 	"spd":5,
@@ -34,17 +34,21 @@
 	"items":
 	[
 		{
-			"name":"Potion", 
+			"id":"hpotion",
+			"name":"Health Potion", 
 			"descrip": "Increase HP by 5", 
-			"boost":"hp",
-			"amount":"+5", 
+			"image":"hpotion.png"
+		},
+		{
+			"id":"mpotion",
+			"name":"Mana Potion", 
+			"descrip": "Increase HP by 5", 
 			"image":"potion.png"
 		},
 		{ 
+			"id":"stick",
 			"name":"Stick", 
 			"descrip": "Does nothing.  What do you want?  It&rsquo;s a stick.", 
-			"boost":"",
-			"amount":"",
 			"image":"stick.png"
 		}
 	],

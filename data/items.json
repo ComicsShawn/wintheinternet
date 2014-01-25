@@ -1,0 +1,36 @@
+{ 
+    "hpotion": 
+    	{ 
+			"name":"Health Potion", 
+			"descrip": "Increase HP by 5", 
+			"target":"player",
+			"type":"boost",
+			"boost":
+			[
+				{ "stat":"HP","amount":"5","type":"+","max":true }
+			],
+			"image":"hpotion.png"	
+        },
+    "mpotion":{
+			"name":"Super Potion", 
+			"descrip": "Increase HP by 5 and Mana by 3", 
+			"target":"player",
+			"type":"boost",
+			"boost":
+			[
+				{ "stat":"MP","amount":"3","type":"+","max":true },
+				{ "stat":"HP","amount":"10","type":"+","max":true }
+			],
+			"image":"potion.png"
+		},
+	"stick":{ 
+			"name":"Stick", 
+			"descrip": "Does nothing.  What do you want?  It&rsquo;s a stick.", 
+			"target":"enemy",
+			"type":"boost",
+			"boost":
+			[
+			],
+			"image":"stick.png"
+		}
+}
