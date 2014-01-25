@@ -128,6 +128,8 @@ function loadMonster(id){
 		//Load monster image
 		$('#'+mid+' > a > img').attr("src",chrome.extension.getURL(mi));
 		
+console.log(mdata);
+
 		//Position monster
 		var monster = $('#'+mid);
 		monster.css('top',my+'px').css('left',mx+'px');
