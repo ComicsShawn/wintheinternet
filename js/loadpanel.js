@@ -28,7 +28,8 @@ function loadMonster(id){
 	 $.getJSON(chrome.extension.getURL('data/monsters.json'),function(data){
 		 console.log("RETURN DATA");
 		 console.log(data);
-		 var mdata = data[id][0];
+		
+		var mdata = data[id][0];
 		//Monster class has the monster style
 		var mclass = 'm_'+mid;
 		//Monster HTML
@@ -49,11 +50,12 @@ function loadMonster(id){
 		var monster = $('#'+mid);
 		monster.css('top',my+'px').css('left',mx+'px');
 		animateMonster(monster);
-		monster.bind('click',function(e){ startBattle(e,mdata); });     
+		monster.bind('click',function(e){ startBattle(e,mdata); });
     });  
 }
 
 function loadQuest(name){
+
 }
 
 function checkUrl(){

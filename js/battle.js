@@ -1,4 +1,3 @@
-
 /* ********************
 FIGHT
 ***********************/
@@ -11,6 +10,21 @@ function startBattle(e,mdata){
 	console.log('BATTLE START');
 	console.log(mdata);
 	
+
+	//let's make a battle system!
+	//hooray!
+
+	//first we need the player datar
+	var playerData;
+	$.getJSON(chrome.extension.getURL('data/player.json'),function(data){
+		console.log(data);
+		playerData = data;
+	})
+
+	//then we make a battle system with the player UND moster data
+	var bSystem = new BattleSystem(playerData, mdata);
+
+
 	var wb = $('#wti_battle');
 	var h = $(window).height();
 	$.get(chrome.extension.getURL("com/battleArena.html"), function(data){
@@ -25,7 +39,38 @@ function startBattle(e,mdata){
 				//Add Monster
 				$('#enemy').attr("src",chrome.extension.getURL("img/monsters/"+mdata['img']));
 				$('#enemyName').html(mdata['name']);
+
+				$("#btnAttack").click(bSystem.attack);
 			});
 	});
 	console.log("Enemy Player Loaded.");
+
+
+}
+
+function BattleSystem(pData, mData) {
+
+	//dis moster data
+	//the m is for monster
+	this.monsterData = mData;
+
+	//player data ref
+	this.playerData = pData;
+
+	console.log("Will it blend");
+
+	console.log(this.playerData, this.monsterData)
+
+	/*
+		Dem dere actions
+	*/
+	this.attack = function() {
+		var diff = this.playerData.atk - this.monsterData.def;
+		this.monsterData.hp -= diff;
+		console.log(this.monsterData.hp)
+	}
+
+	this.defend = function() {
+
+	}
 }
