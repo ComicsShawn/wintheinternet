@@ -36,6 +36,10 @@ function startBattle(e,mdata){
 				$("#btnDefend").click(function() { bSystem.doAction("defend") });
 				$("#btnBattleRun").click(function() { bSystem.doAction("run") });
 				$("#btnBattlePray").click(function() { bSystem.doAction("pray") });
+
+				$("#btnBattleSpecial").click(function() { 
+					
+				})
 			});
 	});
 	console.log("Enemy Player Loaded.");
@@ -90,7 +94,7 @@ function BattleSystem(mData, mArea, bDiv) {
 		me.messageArea.postBattleMethod("<div><button type='button' class='btn btn-success btn-sm' id='btnBattleExit'>Leave battle forever</button></div>")
 		
 		$("#btnBattleExit").click( function() {
-			
+			BuildBattleOut();
 		});
 	}
 
@@ -134,7 +138,9 @@ function BattleSystem(mData, mArea, bDiv) {
 	}
 
 	this.mAttack = function() {
-		var diff = me.monsterData.atk - Math.floor( $("#cDEF").html() * me.extraPlayerData.guard );
+		var fullAttack = me.monsterData.atk + Math.floor( Math.random() * (me.monsterData.atk / 3));
+		var fullDefense = Math.floor( $("#cDEF").html() * me.extraPlayerData.guard );
+		var diff = fullAttack - fullDefense;
 		if(diff < 0) diff = 0;
 		var newHP = CharHP() - diff;
 		CharHP(newHP);
@@ -167,6 +173,8 @@ function BattleSystem(mData, mArea, bDiv) {
 				me.defend();
 			} else if(action == "run") {
 				if( me.run() ) return;
+			} else if(action =="pray") {
+				me.messageArea.postBattleMethod("<div>You pray, and nothing happens. What did you think this was, Earthbound?</div>");
 			}
 
 			me.curTurn = "monster";
@@ -180,7 +188,7 @@ function BattleSystem(mData, mArea, bDiv) {
 			BuildBattleOut();
 			return true;
 		} else {
-			me.messageArea.postBattleMethod("<div>You started to run away, but started hiccuping in fear, bringing you to a halt");
+			me.messageArea.postBattleMethod("<div>You started to run away, but started hiccuping in fear, bringing you to a halt</div>");
 			return false;
 		}
 	}
@@ -188,7 +196,10 @@ function BattleSystem(mData, mArea, bDiv) {
 	this.attack = function() {
 		
 		console.log( $("#cATK").html(), me.monsterData.def)
-		var diff = $("#cATK").html() - Math.floor( me.monsterData.def * me.extraMonsterData.guard );
+		var pAtck = parseInt( $("#cATK").html() )
+		var fullAttack = pAtck + Math.floor( Math.random() * (pAtck /3));
+		var fullDefense =  Math.floor( me.monsterData.def * me.extraMonsterData.guard );
+		var diff = fullAttack - fullDefense;
 		
 		if(diff < 0) diff = 0;
 		me.monsterData.hp -= diff;
