@@ -13,6 +13,7 @@
 	overflow-x: hidden;
 	background: #777 url('chrome-extension://__MSG_@@extension_id__/icon.png') no-repeat;
 }
+#avatar { position:absolute; z-index:1000000000; top:0; left:0; width:40px; }
 #wti_panel.active { left:0; }
 #wti_panel_wrap { position:relative; padding:5px 15px 0px 5px; }
 #wti_panel_wrap .container { width:100%; }
