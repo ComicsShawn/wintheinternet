@@ -68,12 +68,20 @@ function checkUrl(){
 	}
 }
 
+function bindBtns(){
+	$('#hop').click(function(){ 
+		$('#wti_panel').toggleClass("active");  
+		$('#iconrow .fa').toggleClass("fa-chevron-left fa-chevron-right");
+	});
+}
+
 $(document).ready(function(){
 	b.append("<div id='wti_panel'></div>");
 	var p = $('#wti_panel');
 	$.get(chrome.extension.getURL("com/characterSheet.html"), function(data){
 		p.html(data);
 		loadStats();
+		bindBtns();
 		checkUrl();
 	});
 });
