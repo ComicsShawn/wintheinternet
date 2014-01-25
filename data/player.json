@@ -1,5 +1,7 @@
 { 
 	"name": "Speedo", 
+	"level": 1,
+	"class": "Warrior",
 	"img": "default.gif",
 	"maxhp":25,
 	"maxmp":10,
@@ -28,20 +30,22 @@
 			"amount":"+3,-3" 
 		}
 	],	
-	"items": [
-		{ 
-			"name":"Potion", 
-			"descrip": "Increase HP by 5", 
-			"boost":"hp",
-			"amount":"+5", 
-			"image":"potion.png"
-		},
-		{ 
-			"name":"Stick", 
-			"descrip": "Does nothing.  What do you want?  It's a stick.", 
-			"boost":"",
-			"amount":"",
-			"image":"stick.png"
-		},
-	]		
+	
+	"items":
+		[
+			{
+				"name":"Potion", 
+				"descrip": "Increase HP by 5", 
+				"boost":"hp",
+				"amount":"+5", 
+				"image":"potion.png"
+			},
+			{ 
+				"name":"Stick", 
+				"descrip": "Does nothing.  What do you want?  It's a stick.", 
+				"boost":"",
+				"amount":"",
+				"image":"stick.png"
+			}
+		]	
 }
