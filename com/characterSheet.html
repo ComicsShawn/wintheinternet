@@ -1,16 +1,20 @@
 <div id="wti_panel_wrap">
 	<div class="container">
-		<div id="titleBar" class="row">
+		<div id="titleBar" class="row text-center">
 			<div class="col-sm-12">
 				<h1 id="characterName"></h1>
 			</div>
 			<div class="col-sm-12">
-				Level <span id="characterLevel"></div> <span id="characterClass"></span>
+				Level <span id="characterLevel"></span> <span id="characterClass"></span>
 			</div>
 		</div>
 		<div class="row">
 			<div id="characterIcon" class="col-sm-12">
 				<img id="character" class="img-rounded img-responsive" src="" />
+				<!-- Optional Equip Layers -->
+				<img id="ARL" src=""/>
+				<img id="LHL" src=""/>
+				<img id="RHL" src=""/>
 			</div>
 		</div>
 		<div id="characterStatus" class="row">
@@ -36,6 +40,17 @@
 				</div>
 			</div>
 		</div>
+		<div id="charEquip" class="row">
+			<div class="col-sm-4">
+				Armor<br/><span id="characterAR"><a href="#" class="btn btn-default item"><img class="equip img-responsive" src=""/></a></span>
+			</div>
+			<div class="col-sm-4">
+				Left Hand<br/><span id="characterLH"><a href="#" class="btn btn-default item"><img class="equip img-responsive" src=""/></a></span>
+			</div>
+			<div class="col-sm-4">
+				Right Hand<br/><span id="characterRH"><a href="#" class="btn btn-default item"><img class="equip img-responsive" src=""/></a></span>
+			</div>
+		</div>
 		<div id="charStats" class="row">
 			<div class="col-sm-3">
 				Attack<br/><span id="characterATK"></span>
@@ -52,58 +67,43 @@
 		</div>
 		<div id="characterItems" class="row">
 			<div class="col-sm-3">
-				<div id="charItem1" class="item">
-				Item!
+				<div id="charItem-0">
+					<button class="btn btn-default item active" disabled="disabled"></button>
 				</div>
 			</div>
 			<div class="col-sm-3">
-				<div id="charItem1" class="item">
-				Item!
+				<div id="charItem-1">
+					<button class="btn btn-default item active" disabled="disabled"></button>
 				</div>
 			</div>
 			<div class="col-sm-3">
-				<div id="charItem1" class="item">
-				Item!
+				<div id="charItem-2">
+					<button class="btn btn-default item active" disabled="disabled"></button>
 				</div>
 			</div>
 			<div class="col-sm-3">
-				<div id="charItem1" class="item">
-				Item!
+				<div id="charItem-3">
+					<button class="btn btn-default item active" disabled="disabled"></button>
 				</div>
 			</div>
 			<div class="col-sm-3">
-				<div id="charItem1" class="item">
-				Item!
+				<div id="charItem-4">
+					<button class="btn btn-default item active" disabled="disabled"></button>
 				</div>
 			</div>
 			<div class="col-sm-3">
-				<div id="charItem1" class="item">
-				Item!
+				<div id="charItem-5">
+					<button class="btn btn-default item active" disabled="disabled"></button>
 				</div>
 			</div>
 			<div class="col-sm-3">
-				<div id="charItem1" class="item">
-				Item!
+				<div id="charItem-6">
+					<button class="btn btn-default item active" disabled="disabled"></button>
 				</div>
 			</div>
 			<div class="col-sm-3">
-				<div id="charItem1" class="item">
-				Item!
-				</div>
-			</div>
-			<div class="col-sm-3">
-				<div id="charItem1" class="item">
-				Item!
-				</div>
-			</div>
-			<div class="col-sm-3">
-				<div id="charItem1" class="item">
-				Item!
-				</div>
-			</div>
-			<div class="col-sm-3">
-				<div id="charItem1" class="item">
-				Item!
+				<div id="charItem-7">
+					<button class="btn btn-default item active" disabled="disabled"></button>
 				</div>
 			</div>
 		</div>

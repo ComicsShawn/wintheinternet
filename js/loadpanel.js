@@ -47,6 +47,23 @@ function loadStats(){
 		$("#characterDEF").html(data['def']);
 		$("#characterSPD").html(data['spd']);
 		
+		/* Character Equipment */
+		$("#characterAR > a > img").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['ar']['image']));
+		$("#characterLH > a > img").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['lh']['image']));
+		$("#characterRH > a > img").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['rh']['image']));
+		$("#ARL").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['ar']['layer']));
+		$("#LHL").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['lh']['layer']));
+		$("#RHL").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['rh']['layer']));
+		
+		/* Character Items */
+		for (var i = 0; i < data["items"].length; ++i){
+			console.log("Loading Item "+i);
+			console.log(data["items"][i]);
+			$("#charItem-"+i+" > button")
+				.prop("disabled",false)
+				.html("<img class='img-responsive' src='"+chrome.extension.getURL("img/items/"+data["items"][i]["image"])+"'/>");
+		}
+		
 		$("#character").attr('src',chrome.extension.getURL("img/sprites/"+pimg));	
 	  	  
 	  }, 
