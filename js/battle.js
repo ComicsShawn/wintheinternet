@@ -22,7 +22,7 @@ function startBattle(e,mdata){
 	})
 
 	//then we make a battle system with the player UND moster data
-	var bSystem = new BattleSystem(playerData, mdata);
+	var bSystem;
 
 
 	var wb = $('#wti_battle');
@@ -40,37 +40,79 @@ function startBattle(e,mdata){
 				$('#enemy').attr("src",chrome.extension.getURL("img/monsters/"+mdata['img']));
 				$('#enemyName').html(mdata['name']);
 
-				$("#btnAttack").click(bSystem.attack);
+
+				//setup battle system
+				bSystem = new BattleSystem(mdata, $("#msg-area"));
+				$("#btnAttack").click(function() { bSystem.doAction("attack") });
 			});
 	});
 	console.log("Enemy Player Loaded.");
 
+}
+
+function playerWins() {
 
 }
 
-function BattleSystem(pData, mData) {
+function monsterWins() {
+
+}
+
+function BattleSystem(mData, mArea) {
 
 	//dis moster data
 	//the m is for monster
 	this.monsterData = mData;
+	this.messageArea = mArea;
 
-	//player data ref
-	this.playerData = pData;
+	this.curTurn = "player";
 
-	console.log("Will it blend");
+	//stupid fix
+	var me = this;
 
-	console.log(this.playerData, this.monsterData)
+	//checks the battle state and stuff
+	this.checkState = function() {
+		if(me.monsterData.hp <= 0) {
+			playerWins();
+		}
+
+		if(me.curState = "monster") {
+			me.monsterTurn();
+		}
+	}
+
+	//Well, the monster needs to be able to do some things too, you kno
+	this.monsterTurn = function() {
+
+	}
 
 	/*
 		Dem dere actions
 	*/
+
+	//this acts as a router to other functions, so we can do any stuff around them as well..
+	// like cleanup and set current turn
+	this.doAction = function(action) {
+
+		if(action=="attack") {
+			me.attack();
+		}
+
+		me.curState = "monster";
+		me.checkState();
+	}
+
 	this.attack = function() {
-		var diff = this.playerData.atk - this.monsterData.def;
-		this.monsterData.hp -= diff;
-		console.log(this.monsterData.hp)
+		var diff = $("#characterATK").html() - me.monsterData.def;
+		me.monsterData.hp -= diff;
+
+		console.log(me.messageArea);
+		me.messageArea.append("<div>You attack for an awkward " + diff + " damage!</div>");
 	}
 
 	this.defend = function() {
 
 	}
+
+
 }
