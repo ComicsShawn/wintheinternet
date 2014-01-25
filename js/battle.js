@@ -13,17 +13,7 @@ function startBattle(e,mdata){
 
 	//let's make a battle system!
 	//hooray!
-
-	//first we need the player datar
-	var playerData;
-	$.getJSON(chrome.extension.getURL('data/player.json'),function(data){
-		console.log(data);
-		playerData = data;
-	})
-
-	//then we make a battle system with the player UND moster data
 	var bSystem;
-
 
 	var wb = $('#wti_battle');
 	var h = $(window).height();
@@ -40,22 +30,12 @@ function startBattle(e,mdata){
 				$('#enemy').attr("src",chrome.extension.getURL("img/monsters/"+mdata['img']));
 				$('#enemyName').html(mdata['name']);
 
-
 				//setup battle system
 				bSystem = new BattleSystem(mdata, $("#msg-area"));
 				$("#btnAttack").click(function() { bSystem.doAction("attack") });
 			});
 	});
 	console.log("Enemy Player Loaded.");
-
-}
-
-function playerWins() {
-
-}
-
-function monsterWins() {
-
 }
 
 function BattleSystem(mData, mArea) {
@@ -65,24 +45,76 @@ function BattleSystem(mData, mArea) {
 	this.monsterData = mData;
 	this.messageArea = mArea;
 
+	this.extraMonsterData = {
+		guarding: false
+	};
+
+	this.extraPlayerData = {
+		guarding: false
+	}; // status stuff
+
+	//utility function to both add a message and scroll the log down
+	this.messageArea.postBattleMethod = function(message) {
+		this.append(message);
+		this.scrollTop( this.prop('scrollHeight') )
+	}
+
+	//turn swapping
 	this.curTurn = "player";
 
 	//stupid fix
 	var me = this;
 
+	this.playerWins = function () {
+		me.messageArea.postBattleMethod("Well dang, you showed " + me.monsterData.name +  " who's the boss");
+	}
+
+	function monsterWins(messageArea) {
+		me.messageArea.postBattleMethod("You let that " + me.monsterData.name + " beat you up!");
+	}
+
 	//checks the battle state and stuff
 	this.checkState = function() {
 		if(me.monsterData.hp <= 0) {
-			playerWins();
+			me.playerWins();
+			return;
 		}
 
-		if(me.curState = "monster") {
+		if( CharHP <= 0 ) {
+			me.monsterWins();
+			return;
+		}
+
+		if(me.curTurn == "monster") {
 			me.monsterTurn();
 		}
 	}
 
 	//Well, the monster needs to be able to do some things too, you kno
 	this.monsterTurn = function() {
+		var selectedChoice = Math.random();
+		
+		if(selectedChoice < .5) {
+			me.mAttack();
+		} else {
+			me.mDefend();
+		}
+
+		me.curTurn = "player";
+	}
+
+	this.mAttack = function() {
+		var diff = me.monsterData.atk - $("#characterDEF").html();
+		var newHP = CharHP() - diff;
+		CharHP(newHP);
+		me.messageArea.postBattleMethod("<div>"+ me.monsterData.name + " hits for a rad " + diff + " damage!</div>");
+
+		
+	}
+
+	this.mDefend = function() {
+		me.extraMonsterData.guarding = true;
+		me.messageArea.postBattleMethod("<div>"+ me.monsterData.name + " curls up into a little ball.</div>");
 
 	}
 
@@ -98,7 +130,7 @@ function BattleSystem(mData, mArea) {
 			me.attack();
 		}
 
-		me.curState = "monster";
+		me.curTurn = "monster";
 		me.checkState();
 	}
 
@@ -107,7 +139,7 @@ function BattleSystem(mData, mArea) {
 		me.monsterData.hp -= diff;
 
 		console.log(me.messageArea);
-		me.messageArea.append("<div>You attack for an awkward " + diff + " damage!</div>");
+		me.messageArea.postBattleMethod("<div>You attack for an awkward " + diff + " damage!</div>");
 	}
 
 	this.defend = function() {
@@ -115,4 +147,18 @@ function BattleSystem(mData, mArea) {
 	}
 
 
+}
+
+
+function CharHP(desiredHP) {
+	if(!desiredHP) {
+		//getter
+		return $("#characterHealth > .progress > .progress-bar").attr("aria-valuenow");
+	} else {
+		//setter
+		console.log(desiredHP);
+		var currentHP = (desiredHP/$("#cHPM").html())*100;
+		$("#characterHealth > .progress > .progress-bar").attr("aria-valuenow",desiredHP).css("width", currentHP+"%")
+		$("#cHP").html(desiredHP);
+	}
 }
