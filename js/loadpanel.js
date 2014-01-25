@@ -59,11 +59,26 @@ function loadStats(){
 		for (var i = 0; i < data["items"].length; ++i){
 			console.log("Loading Item "+i);
 			console.log(data["items"][i]);
+			var p = '';
+			switch(i){
+				case 0:
+				case 4:
+					p = 'right';
+					break;
+				case 3:
+				case 7:
+					p = 'left';
+					break;
+				default:
+					p = 'top';
+					break;
+			}
 			$("#charItem-"+i+" > button")
 				.prop("disabled",false)
-				.html("<img class='img-responsive' src='"+chrome.extension.getURL("img/items/"+data["items"][i]["image"])+"'/>");
+				.html("<img data-placement='"+p+"' data-original-title='"+data["items"][i]["name"]+"<br/>"+data["items"][i]["descrip"]+"' class='img-responsive tip' src='"+chrome.extension.getURL("img/items/"+data["items"][i]["image"])+"'/>");
 		}
-		
+		//Initialize Tooltips
+		$('.tip').tooltip({html:true,container:'#wti_panel'});
 		$("#character").attr('src',chrome.extension.getURL("img/sprites/"+pimg));	
 	  	  
 	  }, 
@@ -145,4 +160,6 @@ $(document).ready(function(){
 		bindBtns();
 		checkUrl();
 	});
+	//Initialize Tooltips
+	$('.tip').tooltip();
 });

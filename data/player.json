@@ -42,7 +42,7 @@
 		},
 		{ 
 			"name":"Stick", 
-			"descrip": "Does nothing.  What do you want?  It's a stick.", 
+			"descrip": "Does nothing.  What do you want?  It&rsquo;s a stick.", 
 			"boost":"",
 			"amount":"",
 			"image":"stick.png"
