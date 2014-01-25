@@ -47,6 +47,38 @@ function loadStats(){
 		$("#characterDEF").html(data['def']);
 		$("#characterSPD").html(data['spd']);
 		
+		/* Character Equipment */
+		$("#characterAR > a > img").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['ar']['image']));
+		$("#characterLH > a > img").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['lh']['image']));
+		$("#characterRH > a > img").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['rh']['image']));
+		$("#ARL").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['ar']['layer']));
+		$("#LHL").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['lh']['layer']));
+		$("#RHL").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['rh']['layer']));
+		
+		/* Character Items */
+		for (var i = 0; i < data["items"].length; ++i){
+			console.log("Loading Item "+i);
+			console.log(data["items"][i]);
+			var p = '';
+			switch(i){
+				case 0:
+				case 4:
+					p = 'right';
+					break;
+				case 3:
+				case 7:
+					p = 'left';
+					break;
+				default:
+					p = 'top';
+					break;
+			}
+			$("#charItem-"+i+" > button")
+				.prop("disabled",false)
+				.html("<img data-placement='"+p+"' data-original-title='"+data["items"][i]["name"]+"<br/>"+data["items"][i]["descrip"]+"' class='img-responsive tip' src='"+chrome.extension.getURL("img/items/"+data["items"][i]["image"])+"'/>");
+		}
+		//Initialize Tooltips
+		$('.tip').tooltip({html:true,container:'#wti_panel'});
 		$("#character").attr('src',chrome.extension.getURL("img/sprites/"+pimg));	
 	  	  
 	  }, 
@@ -129,4 +161,6 @@ $(document).ready(function(){
 		bindBtns();
 		checkUrl();
 	});
+	//Initialize Tooltips
+	$('.tip').tooltip();
 });
