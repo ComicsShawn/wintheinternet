@@ -1,7 +1,7 @@
 /* ********************
 Use Items!
 ***********************/
-function useItem(e,idata){
+function useItem(e,idata,slot){
 	e.preventDefault();
 	$.ajax({
 	  url: chrome.extension.getURL('data/items.json'),
@@ -15,6 +15,8 @@ function useItem(e,idata){
 		switch(item["type"]){
 			case 'boost':
 				itemBoost(tgt,item["boost"]);
+				if(!['item']['permanent'])
+					destroyItem(slot);
 				break;
 		}
 	  }, 
@@ -57,4 +59,11 @@ function itemBoost(tgt,boosts){
 				break;
 		}
 	}
+}
+
+function destroyItem(slot){
+	$('#'+slot+' > button > img').fadeOut(1000,function(){
+			alert("it gone!");
+	});	
+	$('#'+slot+' > button').prop('disabled',true).attr('id','');
 }

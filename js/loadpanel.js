@@ -79,7 +79,7 @@ function loadStats(){
 				.html("<img data-placement='"+p+"' data-original-title='"+data["items"][i]["name"]+"<br/>"+data["items"][i]["descrip"]+"' class='img-responsive tip' src='"+chrome.extension.getURL("img/items/"+data["items"][i]["image"])+"'/>");
 		}
 		//Bind Item Use
-		$('#characterItems .item').click(function(e){ useItem(e,$(this).attr('id')); });
+		$('#characterItems .item').click(function(e){ useItem(e,$(this).attr('id'),$(this).parent('div').attr('id')); });
 		//Initialize Tooltips
 		$('.tip').tooltip({html:true,container:'#wti_panel'});
 		$("#character").attr('src',chrome.extension.getURL("img/sprites/"+pimg));	
