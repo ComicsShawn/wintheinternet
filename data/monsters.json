@@ -1,0 +1,19 @@
+{ 
+    "hornedelf": 
+    [ 
+        { 
+        	"name": "Horned Elf", 
+        	"id": "hornedElf",
+        	"img": "horny.gif",
+        	"hp":20,
+        	"mp":20,
+        	"atk":6,
+        	"def":4,
+        	"spd":10,
+        	"mag":8,
+        	"specials": [
+        		{ "name":"Wind Cut", "Boost":"atk","Amount":"50%" }
+        	]		
+        }
+    ]
+}

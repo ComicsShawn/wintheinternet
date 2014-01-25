@@ -11,12 +11,15 @@
       "default_popup": "popup.html"
   },
   "web_accessible_resources": [
-    "panel.html",
+    "com/*",
+    "img/*",
+    "fonts/*",
+    "data/*",
     "icon.png"
   ],
   "content_scripts": [ {
-  	"css": [ "css/bootstrap.min.css", "css/panel.css" ],
-    "js": [ "js/jquery.min.js", "js/annoy.js" ],
+  	"css": [ "css/bootstrap.min.css", "css/font-awesome.min.css", "css/panel.css", "css/monster.css", "css/battle.css" ],
+    "js": [ "js/jquery.min.js", "js/utils.js", "js/loadpanel.js" ],
     "matches": [ "http://*/*", "https://*/*"]
   }],
   "manifest_version": 2
