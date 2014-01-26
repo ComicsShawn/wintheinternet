@@ -22,7 +22,7 @@ stopMusic.setAttribute("val",0);
  audioElementBG.setAttribute("id", "background");
  audioElementBG.setAttribute("preload", "auto");
  audioElementBG.setAttribute("loop", "true");
- audioElementBG.setAttribute("volume", "0.4");
+ audioElementBG.setAttribute("volume", "0.5");
  audioElementBG.autobuffer = true;
  
  var audioElementFX = document.createElement('audio');

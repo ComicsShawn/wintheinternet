@@ -44,7 +44,18 @@ function animateMonster(monster,height,width){
     monster.animate({ top: newq[0], left: newq[1] }, speed, function(){
       animateMonster(monster,height,width);        
     });
+};
+function animateNPC(npc,height,width){
+	if(height === undefined) height = 100;
+	if(width === undefined)  width = 100;
+	
+    var newq = makeNewPosition(height,width);
+    var oldq = npc.offset();
+    var speed = calcSpeed([oldq.top, oldq.left], newq);
     
+    npc.animate({ top: newq[0], left: newq[1] }, speed, function(){
+      animateNPC(npc,height,width);        
+    });
 };
 
 function adjustProgressBar(stat,type,amt){

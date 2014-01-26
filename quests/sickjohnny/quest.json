@@ -25,6 +25,17 @@
 					"npcpath":"unusual-man.jpg",
 					"completeMSG":"What&rsquo;s the best resource for Blue Ringed Octopus?  Octopi?  Octupussi... never mind"
 				}
+		},
+		"en.wikipedia.org":{
+			"/wiki/Blue-ringed_octopus": {                       
+					"number":2,
+					"type":"position",
+					"x":"4%",
+					"y":"30%",
+					"img":"redherring",
+					"imgpath":"redherring.gif",
+					"completeMSG":"What&rsquo;s the best resource for Blue Ringed Octopus?  Octopi?  Octupussi... never mind"
+				}
 		}
 		
 	}

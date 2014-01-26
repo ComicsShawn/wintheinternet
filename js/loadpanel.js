@@ -162,7 +162,53 @@ function destroyStats(){
 /* *******************
 Function to load all Monster Stats
 *********************/
-function loadMonster(id){
+function loadNPC(id,mood){
+	console.log("LOAD NPC: "+id);
+	
+	//Monster ID will be generated. Must be unique
+	var nid = id;
+	
+	 $.getJSON(chrome.extension.getURL('data/npcs.json'),function(data){
+		 console.log("RETURN NPC");
+		 console.log(data);
+		
+		var ndata = data[id];
+		//Monster class has the monster style
+		var nclass = 'm_'+id;
+		//Monster HTML
+		var npc = '<div id="'+id+'" class="wti-npc '+nclass+' actions" style="padding:'+ndata['hoverzone']+'"><a href="#"><img src="" class="img-responsive" width="'+ndata['width']+'"></a>'+
+				'<div class="actionpane pull-right">';
+				for(i=0;i<ndata["actions"].length;++i){
+					npc += '<button class="btn btn-xs margin-right '+ndata['actions'][i]['function']+'">'+ndata['actions'][i]['name']+'</button>';
+				}
+			npc += '</div></div>';
+		//Loaded x position
+		var nx = ndata["x"];
+		//Loaded y position
+		var ny = ndata["y"];
+		//Monster img
+		var ni = "img/npcs/"+ndata['img'];
+		
+		//Load the monster container
+		b.append(npc);
+		$('.talk').click(function(e){ openDialogFile(e,"redherring"); });
+		//Load monster image
+		$('#'+id+' > a > img').attr("src",chrome.extension.getURL(ni));
+
+		//Position monster
+		var obj = $('#'+id);
+		obj.css('top',ny).css('left',nx);
+		if(ndata["type"]=="animated"){
+			animateMonster(obj);
+		}
+		//monster.bind('click',function(e){ startBattle(e,mdata); });
+    });  
+}
+
+/* *******************
+Function to load all Monster Stats
+*********************/
+function loadMonster(id,mood){
 	console.log("LOAD MONSTER: "+id);
 	
 	//Monster ID will be generated. Must be unique
@@ -172,7 +218,7 @@ function loadMonster(id){
 		 console.log("RETURN DATA");
 		 console.log(data);
 		
-		var mdata = data[id][0];
+		var mdata = data[id];
 		//Monster class has the monster style
 		var mclass = 'm_'+mid;
 		//Monster HTML
@@ -308,7 +354,85 @@ function openDialog(e,name,quest){
 			  }, 
 			  error: function (data) {
 					console.log("Player Load Failed");
-					console.log(msg);
+					console.log(data);
+				} 
+			});  
+	});
+}
+
+function openDialogFile(e,file){
+	e.preventDefault();
+	b.append("<div id='dialog'></div>");
+	
+	$.get(chrome.extension.getURL("com/dialog.html"), function(data){
+		$('#dialog').html(data);
+		$.ajax({
+			  url: chrome.extension.getURL("dialog/npcs/"+file+".dialog.json"),
+			  dataType: 'json',
+			  contentType: "application/json; charset=utf-8",
+			  success: function (dialog) {
+				console.log("RETURN QUEST DIALOG");
+				console.log(dialog);
+				var count = 0;
+				var completeType = 0;
+				var nxt = '<ul id="dialogTree" class="unstyled">';
+				//Get the dialog for this quest
+				for (var i = 0; i < dialog.length; ++i){
+					nxt += '<li>';
+					if(dialog[i]["who"]=="")
+						nxt += "<em>"+dialog[i]["said"]+"</em>";
+					else if(dialog[i]["option"]!=undefined){
+						nxt += "<strong>"+dialog[i]["who"]+"</strong>: ";
+						for (var x = 0; x < dialog[i]["option"].length; ++x){
+							nxt += "<button class='btn btn-default'>"+dialog[i]["option"][x]["label"]+"</button>";
+						}
+					}else{
+						completeType = dialog[i]["type"];
+						nxt += "<strong>"+dialog[i]["who"]+"</strong>: "+dialog[i]["said"];	
+						switch(completeType){
+							case 'accept':
+								nxt += "<br/><button id='acceptQuest' class='btn btn-success'>Accept Quest</button>" +
+									"<button class='btn btn-danger'>Deny Quest</button>";
+								break;
+							case 'proceed':
+								nxt += "<br/><button id='completeTask' class='btn btn-success'>Complete Task</button>";
+								break;
+							default:
+								break;
+						}
+					}
+					nxt += '</li>';
+					count++;
+				}
+				nxt += '</ul>';
+				$("#msgs").html(nxt);
+				$("#dialog-next").click(function(e){
+					if(count==1){
+						$('#dialog').remove();
+					}else{
+						e.preventDefault();
+						$("#dialogTree > li:first-child").animate({marginTop: '-=170px'});
+					}
+					count--;
+					if(count==1)
+						$(this).find('.fa').removeClass('fa-chevron-down').addClass('fa-times');
+				});
+				
+				switch(completeType){
+					case 'accept':
+						$("#acceptQuest").click(function(e){ acceptQuest(e,name); });
+						break;
+					case 'proceed':
+						$("#completeTask").click(function(e){ completeTask(e,name); });
+						break;
+					default:
+						//Do nothing.  Must have been a red herring.
+						break;
+				}
+			  }, 
+			  error: function (data) {
+					console.log("Player Load Failed");
+					console.log(data);
 				} 
 			});  
 	});
@@ -389,6 +513,7 @@ function checkUrl(){
 	var domain = window.location.hostname;
 	var pathname = window.location.pathname;
 	var hash = window.location.hash;
+	console.log(domain + " " + pathname + " " + hash);
 	var w = /www\./;
 	domain = domain.replace(w,'');
 	switch(domain){
@@ -407,6 +532,16 @@ function checkUrl(){
 		case 'octopusjuice.com':
 			loadQuest('sickjohnny',domain,pathname);
 			loadMonster('hornedelf');
+			break;
+		case 'en.wikipedia.org':
+			if(pathname=="/wiki/Blue-ringed_octopus"){
+				loadQuest('sickjohnny',domain,pathname);
+				//loadNPC('redherring','odd');
+				loadMonster('dragon','aggressive');
+			}
+			else{
+				loadMonster('hornedelf');
+			}
 			break;
 		default:
 			break;

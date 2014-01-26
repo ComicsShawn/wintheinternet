@@ -1,6 +1,5 @@
 { 
     "hornedelf": 
-    [ 
         { 
         	"name": "Horned Elf", 
         	"id": "hornedElf",
@@ -15,6 +14,20 @@
         	"specials": [
         		{ "name":"Wind Cut", "boost":"atk","amount":"50%" }
         	]		
+        },
+    "dragon": { 
+        	"name": "Dragon", 
+        	"id": "dragon",
+        	"img": "dragon_sd.gif",
+        	"hp":14,
+        	"mp":20,
+        	"atk":6,
+        	"def":5,
+        	"spd":2,
+        	"mag":6,
+            "experience": 20, 
+        	"specials": [
+        		{ "name":"Wind Cut", "boost":"atk","amount":"50%" }
+        	]		
         }
-    ]
 }

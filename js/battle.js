@@ -31,6 +31,7 @@ function startBattle(e,mdata){
 				wb.html(data);
 				//Add Monster
 				$('#enemy').attr("src",chrome.extension.getURL("img/monsters/"+mdata['img']));
+				$('#enemy').attr("rel",mdata['name']);
 				$('#enemyName').html(mdata['name']);
 
 
@@ -93,7 +94,8 @@ function startBattle(e,mdata){
 				$("#btnBattleMagic").click(function() { 
 					$("#mainBattleMenu").hide();
 					$("#magicBattleMenu").show();
-				})
+				});
+				
 			}
 		);
 
@@ -167,7 +169,32 @@ function BattleSystem(mData, mArea, bDiv) {
 	this.playerWins = function () {
 		playSound("BG","victory");
 		me.messageArea.postBattleMethod("<div>Well dang, you showed " + me.monsterData.name +  " who's the boss</div>");
-		me.messageArea.postBattleMethod("<div>You gained <strong>" + me.monsterData.experience + "</strong> experience!</div>")
+		me.messageArea.postBattleMethod("<div>You gained <strong>" + me.monsterData.experience + "</strong> experience!</div>");
+	
+		
+		if($('#enemyName').html()=="2"){
+			
+			setTimeout(function(){
+				me.messageArea.postBattleMethod("<div>HRRRRRRRGH.  Well.... I underestimated you.  I have bad news for you, though....</div>")
+			},1800);
+			setTimeout(function(){
+				me.messageArea.postBattleMethod("<div>It seems as though your potion.... is in another castle....</div>")
+			},3800);
+			setTimeout(function(){
+				me.messageArea.postBattleMethod("<div>HYAHH HA HA HA HA..... urrrrk.</div>")
+			},4800);
+			/*setTimeout(
+				function(){ 
+				}),
+				}),
+				1000);
+			setTimeout(
+				function(){ me.messageArea.postBattleMethod("<div>It seems as though your potion.... is in another castle....</div>");}),
+				1000);;
+			setTimeout(
+				function(){ me.messageArea.postBattleMethod("<div>HYAHH HA HA HA HA..... urrrrk.</div>");}),
+				1000);*/
+		}
 		
 		AddEXP(me.monsterData.experience, me.messageArea)
 
@@ -228,6 +255,8 @@ function BattleSystem(mData, mArea, bDiv) {
 	}
 
 	this.mAttack = function() {
+		if($("#enemy").attr("rel")=="dragon")
+			playSound("FX","dragon");
 		FlashBG();
 		move('action-area',-200, 200, -200,200);
 		var fullAttack = me.monsterData.atk + Math.floor( Math.random() * (me.monsterData.atk / 3));
@@ -256,6 +285,14 @@ function BattleSystem(mData, mArea, bDiv) {
 	//this acts as a router to other functions, so we can do any stuff around them as well..
 	// like cleanup and set current turn
 	this.doAction = function(action, args) {
+		//Bad place.  Got in a rush.
+		if($('#enemyName').html()=="1"){
+			me.messageArea.postBattleMethod("<div>You call those muscles?  Please.  You're embarrassing yourself.  You can't beat me.</div>");
+			$('#enemyName').html("2");
+		}else if($('#enemyName').html()=="Dragon"){
+			me.messageArea.postBattleMethod("<div>Why did you come here?  Was it to gain immortality through the secret Internet potion?  No matter.  You will be done soon.</div>");
+			$('#enemyName').html("1");
+		} 
 		me.togglePlayerScreen();
 		if( !me.battleOver ) {
 			//guard reset

@@ -1,0 +1,28 @@
+{ 
+    "redherring":  
+    	{ 
+        	"name": "Red Herring", 
+        	"id": "redHerring",
+        	"type":"static",
+        	"img": "redherring.gif",
+        	"hp":20,
+        	"mp":20,
+        	"atk":7,
+        	"def":4,
+        	"spd":10,
+        	"mag":8,
+            "experience": 6, 
+            "hoverzone": "40px",
+            "x": "800px",
+            "y": "300px",
+            "width": "100px",
+        	"actions": [
+        		{ "name":"Talk", "function":"talk","dialog":"redherring" },
+        		{ "name":"Fight" },
+        		{ "name":"Get Item" },
+        		{ "name":"Ask Advice" },
+        		{ "name":"Touch Octopus" },
+        		{ "name":"Mislead" }
+        	]		
+        }
+}

@@ -1,0 +1,27 @@
+[
+	{ 
+		"who":"", 
+		"said":"You follow the most obvious lead in the world to arrive at a small, well-kept house in the middle of a hippie forrest. You knock on the door and an unusual man appears."
+	},
+	{ 
+		"who":"Unusual Man", 
+		"said":"What do you want?"
+	},
+	{ 
+		"who":"You", 
+		"said":"Have any Octopus Juice?"
+	},
+	{ 
+		"who":"Unusual Man", 
+		"said":"No, I don't sell it anymore. It's pretty easy to make."
+	},
+	{ 
+		"who":"Unusual Man", 
+		"said":"I suggest you read more about the Blue Ringed Octopus."
+	},
+	{ 
+		"type":"proceed",
+		"who":"You", 
+		"said":"Johnny is going to owe me big for this..."
+	}
+]

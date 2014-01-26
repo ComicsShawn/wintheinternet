@@ -34,6 +34,7 @@
 .wti-hide { display:none; }
 .text-center { text-align:center; }
 .text-right { text-align:right; }
+.margin-right { margin-right:5px; }
 #wti_panel { 
 	z-index:100000000;
 	border:3px solid #000; 
@@ -66,6 +67,12 @@
 #LHL { position:absolute; top:40px; right:3px; width:100px; }
 #RHL { position:absolute; top:100px; left:10px; width:80px;}
 
+/* NPC Styles */
+.wti-npc { position:absolute; }
+.wti-npc.actions > .actionpane { display:none; }
+.wti-npc:hover.actions > .actionpane { display:block; }
+
+/* Item Styling */
 .item { min-height:65px; width:100%; padding:3px; }
 .equip > img { max-height:50px; text-align:center;}
 

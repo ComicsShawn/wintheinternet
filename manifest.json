@@ -20,6 +20,7 @@
     "fonts/*",
     "data/*",
     "quests/*",
+    "dialog/*",
     "icon.png"
   ],
   "content_scripts": [ {
