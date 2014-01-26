@@ -20,7 +20,7 @@
   ],
   "content_scripts": [ {
   	"css": [ "css/bootstrap.min.css", "css/font-awesome.min.css", "css/panel.css", "css/monster.css", "css/battle.css" ],
-    "js": [ "js/jquery.min.js", "js/bootstrap.min.js", "js/utils.js", "js/battle.js","js/loadpanel.js","js/items.js" ],
+    "js": [ "js/jquery.min.js", "js/jquery.color-2.1.2.min.js", "js/bootstrap.min.js", "js/utils.js", "js/battle.js","js/loadpanel.js","js/items.js" ],
     "matches": [ "http://*/*", "https://*/*"]
   }],
   "manifest_version": 2

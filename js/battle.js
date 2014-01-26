@@ -115,6 +115,16 @@ function BuildBattleOut() {
 	);
 }
 
+function FlashBG(col) {
+
+	col = col || "rgba(255,255,255, 1)";
+
+	$('#wti_battle').css("background-color", col)
+	$('#wti_battle').animate({
+      backgroundColor: 'rgba(0,0,0,0.7)'
+    }, 700);
+}
+
 function BattleSystem(mData, mArea, bDiv) {
 
 	//dis moster data
@@ -159,6 +169,14 @@ function BattleSystem(mData, mArea, bDiv) {
 
 		me.messageArea.postBattleMethod("<div><button type='button' class='btn btn-success btn-sm' id='btnBattleExit'>Leave battle forever</button></div>")
 		
+		$('#enemy').animate(
+				{ opacity: 0 },
+				1400, 
+				function(){
+				//	this.remove();
+				}
+		);
+
 		$("#btnBattleExit").click( function() {
 			BuildBattleOut();
 		});
@@ -204,6 +222,8 @@ function BattleSystem(mData, mArea, bDiv) {
 	}
 
 	this.mAttack = function() {
+		FlashBG();
+		
 		var fullAttack = me.monsterData.atk + Math.floor( Math.random() * (me.monsterData.atk / 3));
 		var fullDefense = Math.floor( $("#cDEF").html() * me.extraPlayerData.guard ) + me.extraPlayerData.statChanges.def;
 		var diff = fullAttack - fullDefense;
