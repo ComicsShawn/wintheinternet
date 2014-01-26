@@ -80,8 +80,8 @@
 					"descrip": "Blocks your nuts.", 
 					"boost":"def",
 					"amount":"+3",
-					"image":"shield.gif",
-					"layer":"shield.gif"
+					"image":"shield.png",
+					"layer":"shield.png"
 				},
 			"lh":
 				{ 
@@ -89,8 +89,9 @@
 					"descrip": "Whoop some A.", 
 					"boost":"atk,spd",
 					"amount":"+4,-2",
-					"image":"sword.gif",
-					"layer":"sword.gif"
+					"image":"sword.png",
+					"layer":"sword.png",
+					"sound":"sword"
 				}
 		}
 	

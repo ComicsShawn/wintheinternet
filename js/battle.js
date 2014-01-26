@@ -24,6 +24,8 @@ function startBattle(e,mdata){
 			function(){ 
 				//Hide all the goodies on the page
 				hideAll();
+				//Queue the tunes
+				playSound('BG','battleTheme');
 				//Load Arena
 				wb.html(data);
 				//Add Monster
@@ -42,7 +44,7 @@ function startBattle(e,mdata){
 					contentType: "application/json; charset=utf-8",
 					success: function (data) {
 						pData = data;
-						console.log(pData)
+						console.log(pData);
 						//adding the specials into the speeecial div
 						var specialDiv = $("#battleSpecials");
 						specialDiv.append("<li class='special' data-id='-1'><a href='#'>Back</a></li>");
@@ -107,11 +109,11 @@ function ReturnMainMenu() {
 
 function BuildBattleOut() {
 	$('#wti_battle').animate(
-				{ top: - $(window).height()+"px" },
-				1000, 
-				function(){
-					this.remove();
-				}
+		{ top: - $(window).height()+"px" },
+		1000, 
+		function(){
+			this.remove();
+		}
 	);
 }
 
@@ -122,7 +124,7 @@ function FlashBG(col) {
 	$('#wti_battle').css("background-color", col)
 	$('#wti_battle').animate({
       backgroundColor: 'rgba(0,0,0,0.7)'
-    }, 700);
+    }, 2100);
 }
 
 function BattleSystem(mData, mArea, bDiv) {
@@ -178,7 +180,9 @@ function BattleSystem(mData, mArea, bDiv) {
 		);
 
 		$("#btnBattleExit").click( function() {
+			saveStats();
 			BuildBattleOut();
+			stopSound('BG');
 		});
 	}
 
@@ -231,7 +235,6 @@ function BattleSystem(mData, mArea, bDiv) {
 		var newHP = CharHP() - diff;
 		CharHP(newHP);
 		me.messageArea.postBattleMethod("<div>"+ me.monsterData.name + " hits for a rad " + diff + " damage!</div>");
-
 		
 	}
 
@@ -240,6 +243,10 @@ function BattleSystem(mData, mArea, bDiv) {
 		me.messageArea.postBattleMethod("<div>"+ me.monsterData.name + " curls up into a little ball.</div>");
 	}
 
+	this.togglePlayerScreen = function(){
+		$('.battleScreen').toggleClass('wti-hide');
+	}
+	
 	/*
 		Dem dere actions
 	*/
@@ -247,7 +254,7 @@ function BattleSystem(mData, mArea, bDiv) {
 	//this acts as a router to other functions, so we can do any stuff around them as well..
 	// like cleanup and set current turn
 	this.doAction = function(action, args) {
-
+		me.togglePlayerScreen();
 		if( !me.battleOver ) {
 			//guard reset
 			me.extraPlayerData.guard = 1;
@@ -267,16 +274,19 @@ function BattleSystem(mData, mArea, bDiv) {
 			} else if(action == "magic") {
 				me.processMagic(args);
 			}
-
-			me.curTurn = "monster";
-			me.checkState();
+			
+			setTimeout(function(){
+				me.curTurn = "monster";
+				me.checkState();
+				me.togglePlayerScreen();
+			},2800);
 		}
 	}
 
 	this.run = function() {
 		if(Math.random() < .95) {
 			me.battleOver = true;
-			BuildBattleOut();
+			BuildBattleOut("BG");
 			return true;
 		} else {
 			me.messageArea.postBattleMethod("<div>You started to run away, but started hiccuping in fear, bringing you to a halt</div>");
@@ -285,7 +295,10 @@ function BattleSystem(mData, mArea, bDiv) {
 	}
 
 	this.attack = function() {
-		
+		//Should load in sword from Player data, ideally
+		playSound("FX","sword");
+		//Kluge.  So sue me.
+		$("#enemy").fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
 		console.log( $("#cATK").html(), me.monsterData.def)
 		var pAtck = parseInt( $("#cATK").html() )
 		var fullAttack = pAtck + Math.floor( Math.random() * (pAtck /3)) + parseInt( me.extraPlayerData.statChanges.atk );

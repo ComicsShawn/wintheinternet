@@ -1,3 +1,37 @@
+@font-face {
+    font-family: 'action_manbold';
+    src: url('chrome-extension://__MSG_@@extension_id__/fonts/actionman_bold_macroman/Action_Man_Bold-webfont.eot');
+    src: url('chrome-extension://__MSG_@@extension_id__/fonts/actionman_bold_macroman/Action_Man_Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('chrome-extension://__MSG_@@extension_id__/fonts/actionman_bold_macroman/Action_Man_Bold-webfont.woff') format('woff'),
+         url('chrome-extension://__MSG_@@extension_id__/fonts/actionman_bold_macroman/Action_Man_Bold-webfont.ttf') format('truetype'),
+         url('chrome-extension://__MSG_@@extension_id__/fonts/actionman_bold_macroman/Action_Man_Bold-webfont.svg#action_manbold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'action_manitalic';
+    src: url('chrome-extension://__MSG_@@extension_id__/fonts/actionman_italic_macroman/Action_Man_Italic-webfont.eot');
+    src: url('chrome-extension://__MSG_@@extension_id__/fonts/actionman_italic_macroman/Action_Man_Italic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('chrome-extension://__MSG_@@extension_id__/fonts/actionman_italic_macroman/Action_Man_Italic-webfont.woff') format('woff'),
+         url('chrome-extension://__MSG_@@extension_id__/fonts/actionman_italic_macroman/Action_Man_Italic-webfont.ttf') format('truetype'),
+         url('chrome-extension://__MSG_@@extension_id__/fonts/actionman_italic_macroman/Action_Man_Italic-webfont.svg#action_manitalic') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'action_manregular';
+    src: url('chrome-extension://__MSG_@@extension_id__/fonts/actionman_regular_macroman/Action_Man-webfont.eot');
+    src: url('chrome-extension://__MSG_@@extension_id__/fonts/actionman_regular_macroman/Action_Man-webfont.eot?#iefix') format('embedded-opentype'),
+         url('chrome-extension://__MSG_@@extension_id__/fonts/actionman_regular_macroman/Action_Man-webfont.woff') format('woff'),
+         url('chrome-extension://__MSG_@@extension_id__/fonts/actionman_regular_macroman/Action_Man-webfont.ttf') format('truetype'),
+         url('chrome-extension://__MSG_@@extension_id__/fonts/actionman_regular_macroman/Action_Man-webfont.svg#action_manregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+.wti-hide { display:none; }
 .text-center { text-align:center; }
 .text-right { text-align:right; }
 #wti_panel { 
@@ -12,7 +46,8 @@
 	height:100%;
 	overflow-y: auto; 
 	overflow-x: hidden;
-	background: #777 url('chrome-extension://__MSG_@@extension_id__/icon.png') no-repeat;
+	font-family:'action_manbold',sans-serif;
+	background: #666;
 }
 #avatar { position:absolute; z-index:1000000000; top:0; left:0; width:40px; }
 #wti_panel.active { left:0; }
@@ -28,16 +63,21 @@
 #iconrow .row { width:100%; padding: 5px 0 5px 0; }
 
 #ARL { position:absolute; top:0; left:0; width:50px; height:50px; }
-#LHL { position:absolute; top:200px; right:20px; width:50px; height:100px; }
-#RHL { position:absolute; top:170px; left:10px; width:120px; height:170px; }
+#LHL { position:absolute; top:40px; right:3px; width:100px; }
+#RHL { position:absolute; top:100px; left:10px; width:80px;}
 
 .item { min-height:65px; width:100%; padding:3px; }
+.equip > img { max-height:50px; text-align:center;}
 
 #cCBB { background: #ffcc00; }
-#dialog { overflow-y:hidden; height:150px; }
+#dialog { overflow-y:hidden; height:190px; font-family:'action_manregular',sans-serif; font-size:30px; line-height:40px; }
+#dialog button { margin-right:10px; }
+#dialog strong {font-family:'action_manbold',sans-serif; color:#fff;}
+#dialog em { font-family:'action_manitalic',sans-serif; }
 #dialogTree { list-style-type:none; margin:0; }
-#dialogTree > li { list-style:none; height:120px; margin-bottom:10px;width:100%; }
-#dialog-next { margin-top:100px; }
+#dialogTree > li { list-style:none; height:160px; margin-bottom:10px;width:100%; }
+#dialog-next { margin-top:100px; font-size:18px; color:#fff; }
 
 #eventWindow { margin-top:10px; min-height:150px; background: #444; padding:5px; }
 #eventWindow > .nav > li > a { padding: 3px 5px 3px 5px; }
+.panel { border:1px solid red; }

@@ -89,9 +89,17 @@ function displayStats(player){
 	$("#cSPD").html(player["spd"]);
 	
 	/* Character Equipment */
+	if(player["equipment"]["ar"]["image"]==undefined) player["equipment"]["ar"]["image"] = 'none.gif';
+	if(player["equipment"]["lh"]["image"]==undefined) player["equipment"]["lh"]["image"] = 'none.gif';
+	if(player["equipment"]["rh"]["image"]==undefined) player["equipment"]["rh"]["image"] = 'none.gif';
 	$("#characterAR > a > img").attr('src',chrome.extension.getURL("img/items/"+player["equipment"]["ar"]["image"]));
 	$("#characterLH > a > img").attr('src',chrome.extension.getURL("img/items/"+player["equipment"]["lh"]["image"]));
 	$("#characterRH > a > img").attr('src',chrome.extension.getURL("img/items/"+player["equipment"]["rh"]["image"]));
+	
+	/* Position Over Avatar */
+	if(player["equipment"]["ar"]["layer"]==undefined) player["equipment"]["ar"]["layer"] = 'none.gif';
+	if(player["equipment"]["lh"]["layer"]==undefined) player["equipment"]["lh"]["layer"] = 'none.gif';
+	if(player["equipment"]["rh"]["layer"]==undefined) player["equipment"]["rh"]["layer"] = 'none.gif';
 	$("#ARL").attr('src',chrome.extension.getURL("img/items/"+player["equipment"]["ar"]["layer"]));
 	$("#LHL").attr('src',chrome.extension.getURL("img/items/"+player["equipment"]["lh"]["layer"]));
 	$("#RHL").attr('src',chrome.extension.getURL("img/items/"+player["equipment"]["rh"]["layer"]));
@@ -192,7 +200,7 @@ console.log(mdata);
 }
 
 function loadQuest(name,d,p){
-	console.log("Loading new quest....");
+	console.log("Loading new quest...."+name);
 	
 	$.ajax({
 	  url: chrome.extension.getURL('quests/'+name+'/quest.json'),
@@ -217,12 +225,13 @@ function loadQuest(name,d,p){
 				$("#"+quest["img"]).attr("src",chrome.extension.getURL("quests/"+name+"/"+quest["imgpath"]));
 			//Bind action buttons
 			$('.talk').click(function(e){ openDialog(e,name,quest); });
+			$('.knock').click(function(e){ $("#npc").attr("src",chrome.extension.getURL("quests/"+name+"/"+quest["npcpath"])).removeClass("wti-hide"); openDialog(e,name,quest); });
 	
 		});
 	  }, 
 	  error: function (data) {
-			console.log("Player Load Failed");
-			console.log(msg);
+			console.log("Quest Load Failed");
+			console.log(data);
 		} 
 	});  
 }
@@ -241,6 +250,7 @@ function openDialog(e,name,quest){
 				console.log("RETURN QUEST DIALOG");
 				console.log(dialog);
 				var count = 0;
+				var completeType = 0;
 				var nxt = '<ul id="dialogTree" class="unstyled">';
 				//Get the dialog for this quest
 				for (var i = 0; i < dialog.length; ++i){
@@ -253,10 +263,18 @@ function openDialog(e,name,quest){
 							nxt += "<button class='btn btn-default'>"+dialog[i]["option"][x]["label"]+"</button>";
 						}
 					}else{
+						completeType = dialog[i]["type"];
 						nxt += "<strong>"+dialog[i]["who"]+"</strong>: "+dialog[i]["said"];	
-						if(dialog[i]["type"]=="accept"){
-							nxt += "<br/><button id='acceptQuest' class='btn btn-success'>Accept Quest</button>" +
+						switch(completeType){
+							case 'accept':
+								nxt += "<br/><button id='acceptQuest' class='btn btn-success'>Accept Quest</button>" +
 									"<button class='btn btn-danger'>Deny Quest</button>";
+								break;
+							case 'proceed':
+								nxt += "<br/><button id='completeTask' class='btn btn-success'>Complete Task</button>";
+								break;
+							default:
+								break;
 						}
 					}
 					nxt += '</li>';
@@ -269,13 +287,24 @@ function openDialog(e,name,quest){
 						$('#dialog').remove();
 					}else{
 						e.preventDefault();
-						$("#dialogTree > li:first-child").animate({marginTop: '-=130px'});
+						$("#dialogTree > li:first-child").animate({marginTop: '-=170px'});
 					}
 					count--;
 					if(count==1)
 						$(this).find('.fa').removeClass('fa-chevron-down').addClass('fa-times');
 				});
-				$("#acceptQuest").click(function(e){ acceptQuest(e,name); });
+				
+				switch(completeType){
+					case 'accept':
+						$("#acceptQuest").click(function(e){ acceptQuest(e,name); });
+						break;
+					case 'proceed':
+						$("#completeTask").click(function(e){ completeTask(e,name); });
+						break;
+					default:
+						//Do nothing.  Must have been a red herring.
+						break;
+				}
 			  }, 
 			  error: function (data) {
 					console.log("Player Load Failed");
@@ -314,14 +343,41 @@ function acceptQuest(e,name){
 	});
 }
 
+function completeTask(e,name){
+	e.preventDefault();
+	//Need to build a better way to access quest data while on a quest page
+	logMessage("That guy was weird. At least I have a new clue.","success","herolog");
+	chrome.storage.sync.get('quests', function(result){
+        quests = result['quests'];
+        // Looks like this is the first initialization. Grab from JSON file
+		if(jQuery.isEmptyObject(quests)){
+			alert("Bug.  They shouldn't be able to get here"); 
+		}else{
+			chrome.storage.sync.get('quests', function(result){
+				quests = result['quests'];
+				quests[name] = { 'nextStep':1 };
+				chrome.storage.sync.set({'quests':quests},function(){
+					$("#dialog").remove();
+				});
+			});
+		}
+	});
+}
+
+function loadTreasure(words){
+	
+}
 
 /* Add questions to acceptance queue */
 function refreshQuestList(){
 	chrome.storage.sync.get('quests', function(result){
         quests = result['quests'];
-        for (var i = 0; i < quests.length; ++i){
-        	logMessage(quests[i]["name"],"normal","questlog");
-        }
+        
+		if(!jQuery.isEmptyObject(quests)){
+			for (var i = 0; i < quests.length; ++i){
+				logMessage(quests[i]["name"],"normal","questlog");
+			}
+		}
 	});
 }
 
@@ -345,7 +401,12 @@ function checkUrl(){
 			else{
 				loadMonster('hornedelf');
 				loadTreasure('pina colada');
+				loadTreasure('extension');
 			}
+			break;
+		case 'octopusjuice.com':
+			loadQuest('sickjohnny',domain,pathname);
+			loadMonster('hornedelf');
 			break;
 		default:
 			break;
@@ -354,13 +415,22 @@ function checkUrl(){
 
 function bindActions(){
 	/* Bind the Actions */
-	$('#hop').click(function(e){
+	$('#wti-hop').click(function(e){
 		e.preventDefault();
 		$('#wti_panel').toggleClass("active");  
 		$('#iconrow .fa').toggleClass("fa-chevron-left fa-chevron-right");
 	});
-	$('#save').click(function(e){ e.preventDefault(); saveStats(); });
-	$('#destroy').click(function(e){ e.preventDefault(); destroyStats(); });
+	$('#wti-save').click(function(e){ e.preventDefault(); saveStats(); });
+	$('#wti-destroy').click(function(e){ e.preventDefault(); destroyStats(); });
+	$('#wti-audio').clickToggle(function() {   
+			$(this).children("i").removeClass("fa-volume-down").addClass("fa-volume-up");
+			stopSound("ALL");
+		},
+		function() {
+			$(this).children("i").removeClass("fa-volume-up").addClass("fa-volume-down");
+			playSound("ALL");
+		}
+	);
 	
 	/* tClouds - Cursor Bind */
 	var mX = 0;

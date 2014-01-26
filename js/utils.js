@@ -1,3 +1,24 @@
+(function($) {
+    $.fn.clickToggle = function(func1, func2) {
+        var funcs = [func1, func2];
+        this.data('toggleclicked', 0);
+        this.click(function() {
+            var data = $(this).data();
+            var tc = data.toggleclicked;
+            $.proxy(funcs[tc], this)();
+            data.toggleclicked = (tc + 1) % 2;
+        });
+        return this;
+    };
+}(jQuery));
+
+function playSound(t,s) {
+  chrome.extension.sendMessage({action: "play",type:t,sound:s})
+}
+
+function stopSound(t) {
+  chrome.extension.sendMessage({action: "stop",type:t})
+}
 
 // Generates random new position
 function makeNewPosition(height,width){
