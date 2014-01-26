@@ -27,91 +27,145 @@ Function to load all character stats, including img, health, items, etc
 function loadStats(){
 	console.log("Load player character");
 	
-	$.ajax({
-	  url: chrome.extension.getURL('data/player.json'),
-	  dataType: 'json',
-	  contentType: "application/json; charset=utf-8",
-	  success: function (data) {
-		console.log("RETURN PLAYER DATA");
-		console.log(data);
-		var pimg = data['img'];
-		var currentHP = (data['hp']/data['maxhp'])*100;
-		var currentMP = (data['mp']/data['maxmp'])*100;
-		var currentXP = (data['xp']/data['maxxp'])*100;
-		var currentCB = (data['cb']/data['maxcb'])*100;
-		
-		$("#characterName").html(data['name']);
-		$("#characterLevel").html(data['level']);
-		$("#characterClass").html(data['class']);
-		
-		/* Hit Point Bars */
-		$("#cHP").html(data['hp']);
-		$("#cHPM").html(data['maxhp']);
-		$("#characterHealth > .progress > .progress-bar").attr("aria-valuenow",data["hp"]).attr("aria-valuemax",data["maxhp"]).css("width",currentHP+"%");
-		$("#cMP").html(data['mp']);
-		$("#cMPM").html(data['maxmp']);
-		$("#characterMana > .progress > .progress-bar").attr("aria-valuenow",data["mp"]).attr("aria-valuemax",data["maxmp"]).css("width",currentMP+"%");
-		$("#cXP").html(data['xp']);
-		$("#cXPM").html(data['maxxp']);
-		$("#characterExperience > .progress > .progress-bar").attr("aria-valuenow",data["xp"]).attr("aria-valuemax",data["maxxp"]).css("width",currentXP+"%");
-		$("#cCB").html(data['cb']);
-		$("#cCBM").html(data['maxcb']);
-		$("#characterCoinbits > .progress > .progress-bar").attr("aria-valuenow",data["CB"]).attr("aria-valuemax",data["maxCB"]).css("width",currentCB+"%");
-		
-		/* Character Stats */
-		$("#cATK").html(data['atk']);
-		$("#cMAG").html(data['mag']);
-		$("#cDEF").html(data['def']);
-		$("#cSPD").html(data['spd']);
-		
-		/* Character Equipment */
-		$("#characterAR > a > img").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['ar']['image']));
-		$("#characterLH > a > img").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['lh']['image']));
-		$("#characterRH > a > img").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['rh']['image']));
-		$("#ARL").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['ar']['layer']));
-		$("#LHL").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['lh']['layer']));
-		$("#RHL").attr('src',chrome.extension.getURL("img/items/"+data['equipment']['rh']['layer']));
-		
-		/* Character Items */
-		for (var i = 0; i < data["items"].length; ++i){
-			console.log("Loading Item "+i);
-			console.log(data["items"][i]);
-			var p = '';
-			switch(i){
-				case 0:
-				case 4:
-					p = 'right';
-					break;
-				case 3:
-				case 7:
-					p = 'left';
-					break;
-				default:
-					p = 'top';
-					break;
-			}
-			$("#charItem-"+i+" > button")
-				.prop("disabled",false)
-				.attr("id",data["items"][i]["id"])
-				.html("<img data-placement='"+p+"' data-original-title='"+data["items"][i]["name"]+"<br/>"+data["items"][i]["descrip"]+"' class='img-responsive tip' src='"+chrome.extension.getURL("img/items/"+data["items"][i]["image"])+"'/>");
-		}
-		//Bind Item Use
-		$('#characterItems .item').click(function(e){ useItem(e,$(this).attr('id'),$(this).parent('div').attr('id')); });
-		//Initialize Tooltips
-		$('.tip').tooltip({html:true,container:'#wti_panel'});
-		
-		$("#character").attr('src',chrome.extension.getURL("img/sprites/"+pimg));
-		$("#avatar > img").attr('src',chrome.extension.getURL("img/sprites/"+pimg));	
-	  	  
-	  }, 
-	  error: function (data) {
-			console.log("Player Load Failed");
-			console.log(msg);
-		} 
-	});  
+	// First, try to load the player from the local storage
+	var player = "";
+	chrome.storage.local.get('player', function(result){
+        player = result['player'];
+    });
+    
+    // Looks like this is the first initialization. Grab from JSON file
+    if(jQuery.isEmptyObject(player)){
+		$.ajax({
+		  url: chrome.extension.getURL('data/player.json'),
+		  dataType: 'json',
+		  contentType: "application/json; charset=utf-8",
+		  success: function (data) {
+			console.log("RETURN PLAYER DATA");
+			console.log(data);
+			chrome.storage.local.set({'player':data});
+			displayStats(data);
+		  }, 
+		  error: function (data) {
+				console.log("Player Load Failed");
+				console.log(msg);
+			} 
+		});  
+	}else{
+		displayStats(player);
+	}
 }
 
+function displayStats(player){
+	// Initialize stats from Local Storage
+	var pimg = player["img"];
+	var currentHP = (player["hp"]/player["maxhp"])*100;
+	var currentMP = (player["mp"]/player["maxmp"])*100;
+	var currentXP = (player["xp"]/player["maxxp"])*100;
+	var currentCB = (player["cb"]/player["maxcb"])*100;
+	
+	$("#characterName").html(player["name"]);
+	$("#characterLevel").html(player["level"]);
+	$("#characterClass").html(player["class"]);
+	
+	/* Hit Point Bars */
+	$("#cHP").html(player["hp"]);
+	$("#cHPM").html(player["maxhp"]);
+	$("#characterHealth > .progress > .progress-bar").attr("aria-valuenow",player["hp"]).attr("aria-valuemax",player["maxhp"]).css("width",currentHP+"%");
+	$("#cMP").html(player["mp"]);
+	$("#cMPM").html(player["maxmp"]);
+	$("#characterMana > .progress > .progress-bar").attr("aria-valuenow",player["mp"]).attr("aria-valuemax",player["maxmp"]).css("width",currentMP+"%");
+	$("#cXP").html(player["xp"]);
+	$("#cXPM").html(player["maxxp"]);
+	$("#characterExperience > .progress > .progress-bar").attr("aria-valuenow",player["xp"]).attr("aria-valuemax",player["maxxp"]).css("width",currentXP+"%");
+	$("#cCB").html(player["cb"]);
+	$("#cCBM").html(player["maxcb"]);
+	$("#characterCoinbits > .progress > .progress-bar").attr("aria-valuenow",player["CB"]).attr("aria-valuemax",player["maxCB"]).css("width",currentCB+"%");
+	
+	/* Character Stats */
+	$("#cATK").html(player["atk"]);
+	$("#cMAG").html(player["mag"]);
+	$("#cDEF").html(player["def"]);
+	$("#cSPD").html(player["spd"]);
+	
+	/* Character Equipment */
+	$("#characterAR > a > img").attr('src',chrome.extension.getURL("img/items/"+player["equipment"]["ar"]["image"]));
+	$("#characterLH > a > img").attr('src',chrome.extension.getURL("img/items/"+player["equipment"]["lh"]["image"]));
+	$("#characterRH > a > img").attr('src',chrome.extension.getURL("img/items/"+player["equipment"]["rh"]["image"]));
+	$("#ARL").attr('src',chrome.extension.getURL("img/items/"+player["equipment"]["ar"]["layer"]));
+	$("#LHL").attr('src',chrome.extension.getURL("img/items/"+player["equipment"]["lh"]["layer"]));
+	$("#RHL").attr('src',chrome.extension.getURL("img/items/"+player["equipment"]["rh"]["layer"]));
+	
+	/* Character Items */
+	for (var i = 0; i < player["items"].length; ++i){
+		console.log("Loading Item "+i);
+		console.log(player["items"][i]);
+		var p = '';
+		switch(i){
+			case 0:
+			case 4:
+				p = 'right';
+				break;
+			case 3:
+			case 7:
+				p = 'left';
+				break;
+			default:
+				p = 'top';
+				break;
+		}
+		$("#charItem-"+i+" > button")
+			.prop("disabled",false)
+			.attr("id",player["items"][i]["id"])
+			.html("<img player-placement='"+p+"' player-original-title='"+player["items"][i]["name"]+"<br/>"+player["items"][i]["descrip"]+"' class='img-responsive tip' src='"+chrome.extension.getURL("img/items/"+player["items"][i]["image"])+"'/>");
+	}
+	//Bind Item Use
+	$('#characterItems .item').click(function(e){ useItem(e,$(this).attr('id'),$(this).parent('div').attr('id')); });
+	//Initialize Tooltips
+	$('.tip').tooltip({html:true,container:'#wti_panel'});
+	
+	$("#character").attr('src',chrome.extension.getURL("img/sprites/"+pimg));
+	$("#avatar > img").attr('src',chrome.extension.getURL("img/sprites/"+pimg));	
+}
 
+function saveStats(){
+	//Only include the items you wish to save
+	var player = { 
+		"xp":$("#cXP").html(),
+		"hp":$("#cHP").html(),
+		"mp":$("#cMP").html(),
+		"cb":$("#cCB").html(),
+		"items":
+		[
+			{
+				"id":"hpotion",
+				"name":"Health Potion", 
+				"descrip": "Increase HP by 5", 
+				"image":"hpotion.png"
+			},
+			{
+				"id":"mpotion",
+				"name":"Mana Potion", 
+				"descrip": "Increase HP by 5", 
+				"image":"potion.png"
+			},
+			{ 
+				"id":"stick",
+				"name":"Stick", 
+				"descrip": "Does nothing.  What do you want?  It&rsquo;s a stick.", 
+				"image":"stick.png"
+			}
+		]
+	};
+	chrome.storage.sync.set({'player':player},function(){ alert("Progress Saved"); });
+}
+
+function destroyStats(){
+	var r=confirm("This will delete the data from local storage.  You Sure?");
+	if (r==true)
+	  {
+		chrome.storage.remove('player',function(){ alert("Data Zapped"); });
+	  }
+}
 
 /* *******************
 Function to load all Monster Stats
@@ -153,16 +207,122 @@ console.log(mdata);
     });  
 }
 
-function loadQuest(name){
-
+function loadQuest(name,d,p){
+	console.log("Loading new quest....");
+	
+	$.ajax({
+	  url: chrome.extension.getURL('quests/'+name+'/quest.json'),
+	  dataType: 'json',
+	  contentType: "application/json; charset=utf-8",
+	  success: function (data) {
+		console.log("RETURN QUEST DATA");
+		console.log(data);
+		//Get the quest from this specific domain
+		var quest = data[d][p];
+		$.get(chrome.extension.getURL("quests/"+name+"/"+quest["number"]+".html"), function(data){
+			switch(quest["type"]){
+				case "position":
+					b.append("<div id='quest-wrap'><div>");
+					$("#quest-wrap").html(data).css("position","absolute").css("top",quest["y"]).css("left",quest["x"]);
+					break;
+				default:
+					$('#'+quest["targetID"]).html(data);
+			}
+			//Load an image if there is one
+			if(quest["img"]!="") 
+				$("#"+quest["img"]).attr("src",chrome.extension.getURL("quests/"+name+"/"+quest["imgpath"]));
+			//Bind action buttons
+			$('.talk').click(function(e){ openDialog(e,name,quest); });
+	
+		});
+	  }, 
+	  error: function (data) {
+			console.log("Player Load Failed");
+			console.log(msg);
+		} 
+	});  
 }
+
+function openDialog(e,name,quest){
+	e.preventDefault();
+	b.append("<div id='dialog'></div>");
+	
+	$.get(chrome.extension.getURL("com/dialog.html"), function(data){
+		$('#dialog').html(data);
+		$.ajax({
+			  url: chrome.extension.getURL("quests/"+name+"/"+quest["number"]+".dialog.json"),
+			  dataType: 'json',
+			  contentType: "application/json; charset=utf-8",
+			  success: function (dialog) {
+				console.log("RETURN QUEST DIALOG");
+				console.log(dialog);
+				var count = 0;
+				var nxt = '<ul id="dialogTree" class="unstyled">';
+				//Get the dialog for this quest
+				for (var i = 0; i < dialog.length; ++i){
+					nxt += '<li>';
+					if(dialog[i]["who"]=="")
+						nxt += "<em>"+dialog[i]["said"]+"</em>";
+					else if(dialog[i]["option"]!=undefined){
+						nxt += "<strong>"+dialog[i]["who"]+"</strong>: ";
+						for (var x = 0; x < dialog[i]["option"].length; ++x){
+							nxt += "<button class='btn btn-default'>"+dialog[i]["option"][x]["label"]+"</button>";
+						}
+					}else{
+						nxt += "<strong>"+dialog[i]["who"]+"</strong>: "+dialog[i]["said"];	
+						if(dialog[i]["type"]=="accept"){
+							nxt += "<button id='acceptQuest' class='btn btn-success'>Accept Quest</button>" +
+									"<button class='btn btn-danger'>Deny Quest</button>";
+						}
+					}
+					nxt += '</li>';
+					count++;
+				}
+				nxt += '</ul>';
+				$("#msgs").html(nxt);
+				$("#dialog-next").click(function(e){
+					if(count==1){
+						$('#dialog').remove();
+					}else{
+						e.preventDefault();
+						$("#dialogTree > li:first-child").animate({marginTop: '-=130px'});
+					}
+					count--;
+					if(count==1)
+						$(this).find('.fa').removeClass('fa-chevron-down').addClass('fa-times');
+				});
+				$("#acceptQuest").click(function(e){ acceptQuest(e,name); });
+			  }, 
+			  error: function (data) {
+					console.log("Player Load Failed");
+					console.log(msg);
+				} 
+			});  
+	});
+}
+
+/* Add questions to acceptance queue */
+function acceptQuest(e,name){
+	e.preventDefault();
+	var old = $('#activeQuests').val();
+	if(old=="")
+		$('#activeQuests').val(name);
+	else
+		$('#activeQuests').val(old+","+name);
+}
+
 
 function checkUrl(){
 	var domain = window.location.hostname;
 	var pathname = window.location.pathname;
+	var w = /www\./;
+	domain = domain.replace(w,'');
 	switch(domain){
 		case 'stackoverflow.com':
 			loadMonster('hornedelf');
+			break;
+		case 'google.com':
+			loadQuest('sickjohnny',domain,pathname);
 			break;
 		default:
 			break;
@@ -171,10 +331,12 @@ function checkUrl(){
 
 function bindActions(){
 	/* Bind the Actions */
-	$('#hop').click(function(){ 
+	$('#hop').click(function(e){
+		e.preventDefault();
 		$('#wti_panel').toggleClass("active");  
 		$('#iconrow .fa').toggleClass("fa-chevron-left fa-chevron-right");
 	});
+	$('#save').click(function(e){ e.preventDefault(); saveStats(); });
 	
 	/* tClouds - Cursor Bind */
 	var mX = 0;
@@ -184,15 +346,17 @@ function bindActions(){
 	var av = $('#avatar > img');
 	$(document).mousemove(function(e) {
 		img = av.attr('src');
-		if(e.pageX < mX){
-			img = img.replace(re,"-lt.");
-			av.attr('src',img);
-		}else if(e.pageX > mX){
-			img = img.replace(re,"-rt.");
-			av.attr('src',img);
-		}else{
-			img = img.replace(re,"-fr.");
-			av.attr('src',img);
+		if(img != undefined){
+			if(e.pageX < mX){
+				img = img.replace(re,"-lt.");
+				av.attr('src',img);
+			}else if(e.pageX > mX){
+				img = img.replace(re,"-rt.");
+				av.attr('src',img);
+			}else{
+				img = img.replace(re,"-fr.");
+				av.attr('src',img);
+			}
 		}
 		mX = e.pageX;
 		av.offset({
@@ -234,9 +398,9 @@ $(document).ready(function(){
 	$.get(chrome.extension.getURL("com/characterSheet.html"), function(data){
 		p.html(data);
 		loadStats();
-		bindActions();
 		checkUrl();
 	});
+	bindActions();
 	//Initialize Tooltips
 	$('.tip').tooltip();
 });

@@ -1,4 +1,5 @@
 .text-center { text-align:center; }
+.text-right { text-align:right; }
 #wti_panel { 
 	z-index:100000000;
 	border:3px solid #000; 
@@ -23,7 +24,7 @@
 
 #titleBar { background:#000; color:#fff; padding:3px 0 4px 0; }
 
-#iconrow { background:#000; position:absolute; bottom:0; }
+#iconrow { width:100%; background:#000; position:absolute; bottom:0; }
 #iconrow .row { width:100%; padding: 5px 0 5px 0; }
 
 #ARL { position:absolute; top:0; left:0; width:50px; height:50px; }
@@ -33,3 +34,7 @@
 .item { min-height:65px; width:100%; padding:3px; }
 
 #cCBB { background: #ffcc00; }
+#dialog { overflow-y:hidden; height:150px; }
+#dialogTree { list-style-type:none; margin:0; }
+#dialogTree > li { list-style:none; height:120px; margin-bottom:10px;width:100%; }
+#dialog-next { margin-top:100px; }

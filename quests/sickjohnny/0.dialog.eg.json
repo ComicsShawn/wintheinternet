@@ -1,0 +1,46 @@
+[
+	{ 
+		"who":"", 
+		"said":"You return home from a long adventure and find your dear friend, Johnny, has fallen ill."
+	},
+	{ 
+		"who":"Johnny", 
+		"said":"Hey, bro.  I&rsquo;m sick"
+	},
+	{ 
+		"who":"You", 
+		"option":
+			[
+				{
+					"type":"nice",
+					"label":"Be Nice",
+					"said":"What happened?"
+				},
+				{
+					"type":"mean",
+					"label":"Be Rude",
+					"said":"You probably deserve it."
+				}
+			]
+	},
+	{ 
+		"who":"Johnny", 
+		"said":"YOLO.  Anyways, can you get me some medicine?"
+	},
+	{ 
+		"who":"Johnny", 
+		"said":"Thanks, jerk.  Anyways, can you get me some medicine?"
+	},
+	{ 
+		"who":"Johnny", 
+		"said":"I think what I need is some Octopus juice."
+	},
+	{ 
+		"who":"You", 
+		"said":"How do I find that?"
+	},
+	{ 
+		"who":"Johnny", 
+		"said":"I&rsquo;m not sure. If only we had some sort of massive database that held all of the world&rsquo;s collective knowledge and would one day probably take over the world...."
+	}
+]
