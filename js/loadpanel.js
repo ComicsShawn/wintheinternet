@@ -202,7 +202,7 @@ function loadQuest(name,d,p){
 		console.log("RETURN QUEST DATA");
 		console.log(data);
 		//Get the quest from this specific domain
-		var quest = data[d][p];
+		var quest = data[0]["steps"][d][p];
 		$.get(chrome.extension.getURL("quests/"+name+"/"+quest["number"]+".html"), function(data){
 			switch(quest["type"]){
 				case "position":
@@ -255,7 +255,7 @@ function openDialog(e,name,quest){
 					}else{
 						nxt += "<strong>"+dialog[i]["who"]+"</strong>: "+dialog[i]["said"];	
 						if(dialog[i]["type"]=="accept"){
-							nxt += "<button id='acceptQuest' class='btn btn-success'>Accept Quest</button>" +
+							nxt += "<br/><button id='acceptQuest' class='btn btn-success'>Accept Quest</button>" +
 									"<button class='btn btn-danger'>Deny Quest</button>";
 						}
 					}
@@ -288,17 +288,51 @@ function openDialog(e,name,quest){
 /* Add questions to acceptance queue */
 function acceptQuest(e,name){
 	e.preventDefault();
-	var old = $('#activeQuests').val();
-	if(old=="")
-		$('#activeQuests').val(name);
-	else
-		$('#activeQuests').val(old+","+name);
+	logMessage("Brave hero!  You have taken on a new quest!","success","herolog");
+	chrome.storage.sync.get('quests', function(result){
+        quests = result['quests'];
+        // Looks like this is the first initialization. Grab from JSON file
+		if(jQuery.isEmptyObject(quests)){
+			$.ajax({
+			  url: chrome.extension.getURL('quests/'+name+'/quest.json'),
+			  dataType: 'json',
+			  contentType: "application/json; charset=utf-8",
+			  success: function (data) {
+				chrome.storage.sync.set({'quests':data},function(){
+					refreshQuestList(name);
+					$("#dialog").remove();
+				});
+			  }, 
+			  error: function (data) {
+					console.log("Player Load Failed");
+					console.log(msg);
+				} 
+			});  
+		}else{
+			alert("Already had the quest");
+		}
+	});
 }
 
+
+/* Add questions to acceptance queue */
+function refreshQuestList(){
+	chrome.storage.sync.get('quests', function(result){
+        quests = result['quests'];
+        for (var i = 0; i < quests.length; ++i){
+        	logMessage(quests[i]["name"],"normal","questlog");
+        }
+	});
+}
+
+function logMessage(msg,type,dest){
+	$("#"+dest+" > ul").append("<li class='text-"+type+"'>"+msg+"</li>");	
+}
 
 function checkUrl(){
 	var domain = window.location.hostname;
 	var pathname = window.location.pathname;
+	var hash = window.location.hash;
 	var w = /www\./;
 	domain = domain.replace(w,'');
 	switch(domain){
@@ -306,7 +340,12 @@ function checkUrl(){
 			loadMonster('hornedelf');
 			break;
 		case 'google.com':
-			loadQuest('sickjohnny',domain,pathname);
+			if(hash=="")
+				loadQuest('sickjohnny',domain,pathname);
+			else{
+				loadMonster('hornedelf');
+				loadTreasure('pina colada');
+			}
 			break;
 		default:
 			break;
@@ -387,6 +426,7 @@ $(document).ready(function(){
 		p.html(data);
 		loadStats();
 		checkUrl();
+		refreshQuestList();
 		bindActions();
 	  }, 
 	  error: function (data) {

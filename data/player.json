@@ -64,12 +64,6 @@
 		{
 			"ar":
 				{ 
-					"name":"Tunic", 
-					"descrip": "Better than being naked", 
-					"boost":"def",
-					"amount":"+4",
-					"image":"tunic.jpg",
-					"layer":"tunic.jpg"
 				},
 			"rh":
 				{ 

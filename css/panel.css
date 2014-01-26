@@ -38,3 +38,6 @@
 #dialogTree { list-style-type:none; margin:0; }
 #dialogTree > li { list-style:none; height:120px; margin-bottom:10px;width:100%; }
 #dialog-next { margin-top:100px; }
+
+#eventWindow { margin-top:10px; min-height:150px; background: #444; padding:5px; }
+#eventWindow > .nav > li > a { padding: 3px 5px 3px 5px; }

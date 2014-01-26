@@ -3,13 +3,14 @@ Use Items!
 ***********************/
 function useItem(e,idata,slot){
 	e.preventDefault();
-	chrome.storage.sync.get('player', function(result){
-        player = result['player'];
-		var items = player['items'];
-		
+	$.ajax({
+	  url: chrome.extension.getURL('data/items.json'),
+	  dataType: 'json',
+	  contentType: "application/json; charset=utf-8",
+	  success: function (data) {
 		console.log("RETURN ITEM DATA");
-		console.log(items);
-		var item = items[idata];
+		console.log(data);
+		var item = data[idata];
 		var tgt = item["target"];
 		switch(item["type"]){
 			case 'boost':
@@ -18,7 +19,12 @@ function useItem(e,idata,slot){
 					destroyItem(slot);
 				break;
 		}
-    }); 
+	  }, 
+	  error: function (data) {
+			console.log("Item Load Failed");
+			console.log(msg);
+		} 
+	});  
 }
 
 /* itemBoost - For items that affect stats */
@@ -61,14 +67,6 @@ function destroyItem(slot){
 	$('#'+id+' > button').prop('disabled',true).attr('id','');
 	
 	chrome.storage.sync.get('player', function(result){
-        player = result['player'];
-		var items = player['items'];
-		items.splice(slot,1);
-		
-		//chrome.storage.sync.remove('items',function(){ alert("Progress Saved"); });
-		chrome.storage.sync.set({'items':items},function(){ });
-    });
-    chrome.storage.sync.get('player', function(result){
         player = result['player'];
 		var items = player['items'];
 		items.splice(slot,1);

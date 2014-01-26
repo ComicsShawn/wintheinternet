@@ -1,18 +1,22 @@
-{
-	"google.com":{
-		"/": { 
-				"number":0,
-				"targetID":"lga",
-				"type":"position",
-				"x":"20%",
-				"y":"20%",
-				"img":"sickjohn",
-				"imgpath":"sickjohnny.gif"
-			},
-		"other": { 
-				"number":0,
-				"targetID":"lga",
-				"type":"replace"
-			}
+[{
+	"name":"Poor, Sick Johnny",
+	"id":"sickjohnny",
+	"steps":{
+		"google.com":{
+			"/": {                       
+					"number":0,
+					"targetID":"lga",
+					"type":"position",
+					"x":"20%",
+					"y":"20%",
+					"img":"sickjohn",
+					"imgpath":"sickjohnny.gif"
+				},
+			"other": { 
+					"number":0,
+					"targetID":"lga",
+					"type":"replace"
+				}
+		}
 	}
 }
