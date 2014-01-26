@@ -1,8 +1,18 @@
 var audiolist = {
 	//Themes
 	"battleTheme":chrome.extension.getURL("audio/themes/BattleLoopN.wav"),
+	"victory":chrome.extension.getURL("audio/themes/VictoryMusic.wav"),
 	//Battle Sound FX
-	"sword":chrome.extension.getURL("audio/fx/WTI-Sword-Hit2.wav")
+	"sword":chrome.extension.getURL("audio/fx/WTI-Sword-Hit2.wav"),
+	//Misc Sound Effects
+	"potion":chrome.extension.getURL("audio/fx/BurpN.wav"),
+	//Voices and Characters
+	//Heroes
+	//Enemies
+	"dragon":chrome.extension.getURL("audio/voices/DragonN.wav"),
+	"meow":chrome.extension.getURL("audio/voices/DaveMeowN.wav"),
+	"lemeow":chrome.extension.getURL("LeMeowN.wav")
+	
 }
 
 var stopMusic = document.createElement('input');
@@ -22,8 +32,8 @@ stopMusic.setAttribute("val",0);
  audioElementFX.autobuffer = true;
 
 //Create blank source elements 
-audioElementBG.appendChild(createSource("battleTheme",""));
-audioElementFX.appendChild(createSource("sword",""));
+audioElementBG.appendChild(createSource("",""));
+audioElementFX.appendChild(createSource("",""));
  
 function createSource(file,w){
 	/*if(w=="BG")
@@ -43,7 +53,7 @@ function createSource(file,w){
     function(request, sender, sendResponse) {
       if (request.action == "play"){
       	  if(request.type=="BG"){
-      	  	  //audioElementBG.appendChild(createSource(request.sound,"BG"));
+      	  	  audioElementBG.setAttribute("src",audiolist[request.sound]);
 			  audioElementBG.load;
 			  audioElementBG.volume=.4;
 			  if(stopMusic.getAttribute("val")!=1)
@@ -52,7 +62,7 @@ function createSource(file,w){
 		  	  audioElementBG.play();
 			  stopMusic.setAttribute("val",1);
 		  }else{
-      	  	  //audioElementFX.appendChild(createSource(request.sound,"FX"));
+      	  	  audioElementFX.setAttribute("src",audiolist[request.sound]);
 			  audioElementFX.load;
 			  audioElementFX.volume=1;
 			  audioElementFX.removeAttribute("loop");

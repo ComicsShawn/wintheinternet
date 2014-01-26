@@ -17,6 +17,7 @@ function startBattle(e,mdata){
 
 	var wb = $('#wti_battle');
 	var h = $(window).height();
+	
 	$.get(chrome.extension.getURL("com/battleArena.html"), function(data){
 		//Pull down the battle screen, then load the data from the html
 		wb.css('top','-'+h+'px').css('display','block')
@@ -164,6 +165,7 @@ function BattleSystem(mData, mArea, bDiv) {
 	var me = this;
 
 	this.playerWins = function () {
+		playSound("BG","victory");
 		me.messageArea.postBattleMethod("<div>Well dang, you showed " + me.monsterData.name +  " who's the boss</div>");
 		me.messageArea.postBattleMethod("<div>You gained <strong>" + me.monsterData.experience + "</strong> experience!</div>")
 		
@@ -227,7 +229,7 @@ function BattleSystem(mData, mArea, bDiv) {
 
 	this.mAttack = function() {
 		FlashBG();
-		
+		move('action-area',-200, 200, -200,200);
 		var fullAttack = me.monsterData.atk + Math.floor( Math.random() * (me.monsterData.atk / 3));
 		var fullDefense = Math.floor( $("#cDEF").html() * me.extraPlayerData.guard ) + me.extraPlayerData.statChanges.def;
 		var diff = fullAttack - fullDefense;
@@ -286,6 +288,7 @@ function BattleSystem(mData, mArea, bDiv) {
 	this.run = function() {
 		if(Math.random() < .95) {
 			me.battleOver = true;
+			playSound("BG","victory");
 			BuildBattleOut("BG");
 			return true;
 		} else {
@@ -420,4 +423,14 @@ function CharMP(desiredMP) {
 		$("#characterMana > .progress > .progress-bar").attr("aria-valuenow",desiredMP).css("width", currentMP+"%")
 		$("#cMP").html(desiredMP);
 	}
+}
+
+function move(id, step1, step2, step3,step4) {
+    $('#'+id).animate({left: '+=' + step1, }, 1000, function() {
+        $(this).animate({ top: '+=' + step2,}, 1000, function() {
+        	$(this).animate({top: '+=' + step3,}, 1000, function() {
+				$(this).animate({left: '-=' + step4}, 1000);
+			});
+        });
+    });   
 }
