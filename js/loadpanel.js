@@ -125,6 +125,9 @@ function displayStats(player){
 	
 	$("#character").attr('src',chrome.extension.getURL("img/sprites/"+pimg));
 	$("#avatar > img").attr('src',chrome.extension.getURL("img/sprites/"+pimg));	
+
+	//hide specials menu
+	$("specialBattleMenu").hide();
 }
 
 function saveStats(){
