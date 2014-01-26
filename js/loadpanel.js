@@ -103,13 +103,12 @@ function loadStats(){
 		$("#character").attr('src',chrome.extension.getURL("img/sprites/"+pimg));
 		$("#avatar > img").attr('src',chrome.extension.getURL("img/sprites/"+pimg));
 
-		//hide specials menu
-		$("specialBattleMenu").hide();
+
 	  	  
 	  }, 
 	  error: function (data) {
 			console.log("Player Load Failed");
-			console.log(msg);
+			//console.log(msg);
 		} 
 	});  
 }

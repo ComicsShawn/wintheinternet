@@ -19,19 +19,25 @@
 	"magic": [
 		{ 
 			"name":"Heal", 
-			"descrip": "Heals you for 5 points of health", 
-			"boost":"hp",
-			"amount":"+5" 
+			"descrip": "Heals you for 5 points of health",
+			"effects": [
+				{ "type": "heal", "amount": "5" }
+			],
+			"cost": "5",
+			"activationMessage": "You heal yourself with Strange Magics"
 		}
 	],	
 	"specials": [
 		{ 
 			"name":"Jump Kick", 
-			"descrip": "Increased Attack, Lowered Defense", 
-			"boost":"hp,def",
-			"amount":"+3,-3" 
+			"descrip": "Increased Attack, Lowered Defense",
+			"effects": [
+				{ "type": "statchange", "value": "atk", "amount":"3" },
+				{ "type": "statchange", "value": "def", "amount":"3" }
+			],
+			"activationMessage": "You jump three inches off the ground and flail your legs at %m"
 		}
-	],	
+	],
 	
 	"items":
 	[
