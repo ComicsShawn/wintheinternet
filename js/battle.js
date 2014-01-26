@@ -34,6 +34,7 @@ function startBattle(e,mdata){
 				//setup UI
 				//hide specials menu
 				$("#specialBattleMenu").hide();
+				$("#magicBattleMenu").hide();
 
 				$.ajax({
 					url: chrome.extension.getURL('data/player.json'),
@@ -44,24 +45,32 @@ function startBattle(e,mdata){
 						console.log(pData)
 						//adding the specials into the speeecial div
 						var specialDiv = $("#battleSpecials");
+						specialDiv.append("<li class='special' data-id='-1'><a href='#'>Back</a></li>");
 						for( var i =0; i < pData.specials.length; i++) {
 							console.log(  pData.specials[i].name );
 							specialDiv.append("<li class='special' data-id='"+i+"'><a href='#'>"+ pData.specials[i].name +"</a></li>");
 						}
 
 						$(".special").click(function() {
-							bSystem.doAction("special", pData.specials[ $(this).data("id") ] );
+							if( $(this).data("id") == -1 ) ReturnMainMenu();
+							else bSystem.doAction("special", pData.specials[ $(this).data("id") ] );
 						})
 
 						//put the magics into the magic div
 						var magicDiv = $("#battleMagic");
+						magicDiv.append("<li class='magic' data-id='-1'><a href='#'>Back</a></li>");
 						for( var i =0; i < pData.magic.length; i++) {
 							console.log(  pData.magic[i].name );
-							magicDiv.append("<li class='special' data-id='"+i+"'><a href='#'>"+ pData.magic[i].name +"</a></li>");
+							magicDiv.append("<li class='magic' data-id='"+i+"'><a href='#'>"+ pData.magic[i].name +"</a></li>");
 						}
 
-						$(".special").click(function() {
-							bSystem.doAction("magic", pData.magic[ $(this).data("id") ] );
+						$(".magic").click(function() {
+							if( $(this).data("id") == -1 ) ReturnMainMenu();
+							else {
+								if(CharMP() >= pData.magic[ $(this).data("id") ].cost) {
+									bSystem.doAction("magic", pData.magic[ $(this).data("id") ] )
+								}
+							};
 						})
 					}
 				});
@@ -260,7 +269,7 @@ function BattleSystem(mData, mArea, bDiv) {
 		
 		console.log( $("#cATK").html(), me.monsterData.def)
 		var pAtck = parseInt( $("#cATK").html() )
-		var fullAttack = pAtck + Math.floor( Math.random() * (pAtck /3)) + me.extraPlayerData.statChanges.atk;
+		var fullAttack = pAtck + Math.floor( Math.random() * (pAtck /3)) + parseInt( me.extraPlayerData.statChanges.atk );
 		var fullDefense =  Math.floor( me.monsterData.def * me.extraMonsterData.guard );
 		var diff = fullAttack - fullDefense;
 		
@@ -297,7 +306,11 @@ function BattleSystem(mData, mArea, bDiv) {
 
 	this.processMagic = function(args) {
 
-
+		//sub MP amount
+		var mugic = parseInt( CharMP() );
+		mugic -= args.cost;
+		console.log(mugic);
+		CharMP( mugic );
 
 		for(var i = 0; i < args.effects.length; i++) {
 			var curEffect = args.effects[i];
@@ -340,7 +353,7 @@ function AddEXP(amt, messageArea) {
 }
 
 function CharHP(desiredHP) {
-	if(!desiredHP) {
+	if(desiredHP === undefined) {
 		//getter
 		return $("#characterHealth > .progress > .progress-bar").attr("aria-valuenow");
 	} else {
@@ -353,13 +366,14 @@ function CharHP(desiredHP) {
 
 function CharMP(desiredMP) {
 
-	if(!desiredMP) {
+	if(desiredMP === undefined) {
 		//getter
 		return $("#characterMana > .progress > .progress-bar").attr("aria-valuenow");
 	} else {
 		//setter
-		var currentMP = (desiredMP/$("#cCMP").html())*100;
-		$("#desiredMP > .progress > .progress-bar").attr("aria-valuenow",desiredHP).css("width", currentHP+"%")
-		$("#cMP").html(desiredHP);
+		var currentMP = (desiredMP/$("#cMPM").html())*100;
+		console.log(currentMP)
+		$("#characterMana > .progress > .progress-bar").attr("aria-valuenow",desiredMP).css("width", currentMP+"%")
+		$("#cMP").html(desiredMP);
 	}
 }
