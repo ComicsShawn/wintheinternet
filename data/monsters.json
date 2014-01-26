@@ -66,7 +66,7 @@
         "def": 3,
         "spd": 40,
         "mag": 32,
-        "experience": -4,
+        "experience": 4,
         "specials": [
             {
                 "name": "Ditto Llama Trample",
@@ -104,7 +104,7 @@
         "def": 2,
         "spd": 40,
         "mag": 33,
-        "experience": -2,
+        "experience": 2,
         "specials": [
             {
                 "name": "Tralalol Song",
