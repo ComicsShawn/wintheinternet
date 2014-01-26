@@ -76,12 +76,12 @@
 				},
 			"lh":
 				{ 
-					"name":"Staff", 
+					"name":"Sword", 
 					"descrip": "Whoop some A.", 
 					"boost":"atk,spd",
 					"amount":"+4,-2",
-					"image":"staff.png",
-					"layer":"staff.png"
+					"image":"sword.gif",
+					"layer":"sword.gif"
 				}
 		}
 	

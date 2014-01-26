@@ -29,30 +29,31 @@ function loadStats(){
 	
 	// First, try to load the player from the local storage
 	var player = "";
-	chrome.storage.local.get('player', function(result){
+	chrome.storage.sync.get('player', function(result){
         player = result['player'];
+        
+        // Looks like this is the first initialization. Grab from JSON file
+		if(jQuery.isEmptyObject(player)){
+			alert("Loaded from File");
+			$.ajax({
+			  url: chrome.extension.getURL('data/player.json'),
+			  dataType: 'json',
+			  contentType: "application/json; charset=utf-8",
+			  success: function (data) {
+				console.log("RETURN PLAYER DATA");
+				console.log(data);
+				chrome.storage.sync.set({'player':data});
+				displayStats(data);
+			  }, 
+			  error: function (data) {
+					console.log("Player Load Failed");
+					console.log(msg);
+				} 
+			});  
+		}else{
+			displayStats(player);
+		}
     });
-    
-    // Looks like this is the first initialization. Grab from JSON file
-    if(jQuery.isEmptyObject(player)){
-		$.ajax({
-		  url: chrome.extension.getURL('data/player.json'),
-		  dataType: 'json',
-		  contentType: "application/json; charset=utf-8",
-		  success: function (data) {
-			console.log("RETURN PLAYER DATA");
-			console.log(data);
-			chrome.storage.local.set({'player':data});
-			displayStats(data);
-		  }, 
-		  error: function (data) {
-				console.log("Player Load Failed");
-				console.log(msg);
-			} 
-		});  
-	}else{
-		displayStats(player);
-	}
 }
 
 function displayStats(player){
@@ -119,7 +120,7 @@ function displayStats(player){
 			.html("<img player-placement='"+p+"' player-original-title='"+player["items"][i]["name"]+"<br/>"+player["items"][i]["descrip"]+"' class='img-responsive tip' src='"+chrome.extension.getURL("img/items/"+player["items"][i]["image"])+"'/>");
 	}
 	//Bind Item Use
-	$('#characterItems .item').click(function(e){ useItem(e,$(this).attr('id'),$(this).parent('div').attr('id')); });
+	$('#characterItems .item').click(function(e){ useItem(e,$(this).attr('id'),$(this).parent('div').attr('rel')); });
 	//Initialize Tooltips
 	$('.tip').tooltip({html:true,container:'#wti_panel'});
 	
@@ -131,42 +132,22 @@ function displayStats(player){
 }
 
 function saveStats(){
-	//Only include the items you wish to save
-	var player = { 
-		"xp":$("#cXP").html(),
-		"hp":$("#cHP").html(),
-		"mp":$("#cMP").html(),
-		"cb":$("#cCB").html(),
-		"items":
-		[
-			{
-				"id":"hpotion",
-				"name":"Health Potion", 
-				"descrip": "Increase HP by 5", 
-				"image":"hpotion.png"
-			},
-			{
-				"id":"mpotion",
-				"name":"Mana Potion", 
-				"descrip": "Increase HP by 5", 
-				"image":"potion.png"
-			},
-			{ 
-				"id":"stick",
-				"name":"Stick", 
-				"descrip": "Does nothing.  What do you want?  It&rsquo;s a stick.", 
-				"image":"stick.png"
-			}
-		]
-	};
-	chrome.storage.sync.set({'player':player},function(){ alert("Progress Saved"); });
+	chrome.storage.sync.get('player', function(result){
+        player = result['player'];
+		player["xp"]=$("#cXP").html();
+		player["hp"]=$("#cHP").html();
+		player["mp"]=$("#cMP").html();
+		player["cb"]=$("#cCB").html();
+		
+		chrome.storage.sync.set({'player':player},function(){ alert("Progress Saved"); });
+    });
 }
 
 function destroyStats(){
 	var r=confirm("This will delete the data from local storage.  You Sure?");
 	if (r==true)
 	  {
-		chrome.storage.remove('player',function(){ alert("Data Zapped"); });
+		chrome.storage.sync.clear();
 	  }
 }
 
@@ -340,6 +321,7 @@ function bindActions(){
 		$('#iconrow .fa').toggleClass("fa-chevron-left fa-chevron-right");
 	});
 	$('#save').click(function(e){ e.preventDefault(); saveStats(); });
+	$('#destroy').click(function(e){ e.preventDefault(); destroyStats(); });
 	
 	/* tClouds - Cursor Bind */
 	var mX = 0;
@@ -398,12 +380,20 @@ function bindActions(){
 $(document).ready(function(){
 	b.append("<div id='wti_panel'></div><div id='avatar'><img class='img-responsive'/></div>");
 	var p = $('#wti_panel');
-	$.get(chrome.extension.getURL("com/characterSheet.html"), function(data){
+	$.ajax({
+	  url: chrome.extension.getURL("com/characterSheet.html"),
+	  dataType: 'html',
+	  success: function (data) {
 		p.html(data);
 		loadStats();
 		checkUrl();
-	});
-	bindActions();
+		bindActions();
+	  }, 
+	  error: function (data) {
+			console.log("Player Load Failed");
+			console.log(msg);
+		} 
+	});  
 	//Initialize Tooltips
 	$('.tip').tooltip();
 });
