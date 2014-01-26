@@ -48,20 +48,20 @@ function startBattle(e,mdata){
 						specialDiv.append("<li class='special' data-id='-1'><a href='#'>Back</a></li>");
 						for( var i =0; i < pData.specials.length; i++) {
 							console.log(  pData.specials[i].name );
-							specialDiv.append("<li class='special' data-id='"+i+"'><a href='#'>"+ pData.specials[i].name +"</a></li>");
+							specialDiv.append("<li class='special' data-toggle='tooltip' title data-original-title='"+pData.specials[i].descrip+"' data-id='"+i+"'><a href='#'>"+ pData.specials[i].name +"</a></li>");
 						}
 
 						$(".special").click(function() {
 							if( $(this).data("id") == -1 ) ReturnMainMenu();
 							else bSystem.doAction("special", pData.specials[ $(this).data("id") ] );
-						})
+						}).tooltip();
 
 						//put the magics into the magic div
 						var magicDiv = $("#battleMagic");
 						magicDiv.append("<li class='magic' data-id='-1'><a href='#'>Back</a></li>");
 						for( var i =0; i < pData.magic.length; i++) {
 							console.log(  pData.magic[i].name );
-							magicDiv.append("<li class='magic' data-id='"+i+"'><a href='#'>"+ pData.magic[i].name +"</a></li>");
+							magicDiv.append("<li class='magic' data-toggle='tooltip' title data-original-title='"+pData.magic[i].descrip+"' data-id='"+i+"'><a href='#'>"+ pData.magic[i].name +"</a></li>");
 						}
 
 						$(".magic").click(function() {
@@ -71,7 +71,7 @@ function startBattle(e,mdata){
 									bSystem.doAction("magic", pData.magic[ $(this).data("id") ] )
 								}
 							};
-						})
+						}).tooltip();
 					}
 				});
 
@@ -113,6 +113,16 @@ function BuildBattleOut() {
 					this.remove();
 				}
 	);
+}
+
+function FlashBG(col) {
+
+	col = col || "rgba(255,255,255, 1)";
+
+	$('#wti_battle').css("background-color", col)
+	$('#wti_battle').animate({
+      backgroundColor: 'rgba(0,0,0,0.7)'
+    }, 700);
 }
 
 function BattleSystem(mData, mArea, bDiv) {
@@ -159,6 +169,14 @@ function BattleSystem(mData, mArea, bDiv) {
 
 		me.messageArea.postBattleMethod("<div><button type='button' class='btn btn-success btn-sm' id='btnBattleExit'>Leave battle forever</button></div>")
 		
+		$('#enemy').animate(
+				{ opacity: 0 },
+				1400, 
+				function(){
+				//	this.remove();
+				}
+		);
+
 		$("#btnBattleExit").click( function() {
 			BuildBattleOut();
 		});
@@ -204,6 +222,8 @@ function BattleSystem(mData, mArea, bDiv) {
 	}
 
 	this.mAttack = function() {
+		FlashBG();
+		
 		var fullAttack = me.monsterData.atk + Math.floor( Math.random() * (me.monsterData.atk / 3));
 		var fullDefense = Math.floor( $("#cDEF").html() * me.extraPlayerData.guard ) + me.extraPlayerData.statChanges.def;
 		var diff = fullAttack - fullDefense;
@@ -218,7 +238,6 @@ function BattleSystem(mData, mArea, bDiv) {
 	this.mDefend = function() {
 		me.extraMonsterData.guard = 1.5;
 		me.messageArea.postBattleMethod("<div>"+ me.monsterData.name + " curls up into a little ball.</div>");
-
 	}
 
 	/*
@@ -312,6 +331,8 @@ function BattleSystem(mData, mArea, bDiv) {
 		console.log(mugic);
 		CharMP( mugic );
 
+		var message = args.activationMessage.replace("%m", me.monsterData.name);
+
 		for(var i = 0; i < args.effects.length; i++) {
 			var curEffect = args.effects[i];
 
@@ -320,10 +341,20 @@ function BattleSystem(mData, mArea, bDiv) {
 				var pHP = parseInt( CharHP() );
 				pHP += parseInt( curEffect.amount );
 				CharHP(pHP);
+			} else if (curEffect.type == "attack") {
+				var pAtck = parseInt( $("#cMAG").html() )
+				var fullAttack = pAtck * curEffect.amount;
+				var fullDefense =  Math.floor( (me.monsterData.def * me.extraMonsterData.guard) / 3 ) + Math.floor( me.monsterData.mag / 3);
+				var diff = fullAttack - fullDefense;
+
+				if(diff < 0) diff = 0;
+				me.monsterData.hp -= diff;
+
+				message = message.replace("%d", diff);
 			}
 		}
 
-		var message = args.activationMessage.replace("%m", me.monsterData.name);
+		
 		me.messageArea.postBattleMethod("<div>"+message+"</div>")
 
 		ReturnMainMenu();

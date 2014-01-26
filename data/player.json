@@ -24,6 +24,15 @@
 			],
 			"cost": "5",
 			"activationMessage": "You heal yourself with Strange Magics"
+		}, 
+		{
+			"name": "Unfathomable Attack",
+			"descrip": "Attack your enemy somehow",
+			"effects": [
+				{ "type":"attack", "amount": 3 } 
+			],
+			"cost": 2,
+			"activationMessage": "Reality bends, or you do. Regardless, %m gets hurt and takes %d damage."
 		}
 	],	
 	"specials": [
