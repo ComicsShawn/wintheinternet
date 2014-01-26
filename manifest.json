@@ -3,7 +3,7 @@
   "description": "Change the current page color",
   "version": "1.0",
   "permissions": [
-    "tabs", "http://*/*", "https://*/*"
+    "tabs", "http://*/*", "https://*/*", "storage"
   ],
   "browser_action": {
       "default_title": "Set this page's color.",
@@ -15,6 +15,7 @@
     "img/*",
     "fonts/*",
     "data/*",
+    "quests/*",
     "icon.png"
   ],
   "content_scripts": [ {

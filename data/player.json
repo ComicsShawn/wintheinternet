@@ -15,7 +15,6 @@
 	"def":6,
 	"spd":5,
 	"mag":4,
-	"gold":100,
 	"magic": [
 		{ 
 			"name":"Heal", 
