@@ -1,33 +1,154 @@
-{ 
-    "hornedelf": 
-        { 
-        	"name": "Horned Elf", 
-        	"id": "hornedElf",
-        	"img": "horny.gif",
-        	"hp":20,
-        	"mp":20,
-        	"atk":7,
-        	"def":4,
-        	"spd":10,
-        	"mag":8,
-            "experience": 6, 
-        	"specials": [
-        		{ "name":"Wind Cut", "boost":"atk","amount":"50%" }
-        	]		
-        },
-    "dragon": { 
-        	"name": "Dragon", 
-        	"id": "dragon",
-        	"img": "dragon_sd.gif",
-        	"hp":14,
-        	"mp":20,
-        	"atk":6,
-        	"def":5,
-        	"spd":2,
-        	"mag":6,
-            "experience": 20, 
-        	"specials": [
-        		{ "name":"Wind Cut", "boost":"atk","amount":"50%" }
-        	]		
-        }
+{
+    "hornedelf": {
+        "name": "Horned Elf",
+        "id": "hornedElf",
+        "img": "horny.gif",
+        "hp": 20,
+        "mp": 20,
+        "atk": 7,
+        "def": 4,
+        "spd": 10,
+        "mag": 8,
+        "experience": 6,
+        "specials": [
+            {
+                "name": "Wind Cut",
+                "boost": "atk",
+                "amount": "50%"
+            }
+        ]
+    },
+    "dragon": {
+        "name": "Dragon",
+        "id": "dragon",
+        "img": "dragon_sd.gif",
+        "hp": 34,
+        "mp": 20,
+        "atk": 10,
+        "def": 5,
+        "spd": 2,
+        "mag": 6,
+        "experience": 20,
+        "specials": [
+            {
+                "name": "Prance",
+                "boost": "atk",
+                "amount": "50%"
+            }
+        ]
+    },
+    "chuck-norris": {
+        "name": "Chuck Norris",
+        "id": "awesome ninja sauce",
+        "img": "chuck_norris.gif",
+        "hp": 9001,
+        "mp": 1000,
+        "atk": 800,
+        "def": 400,
+        "spd": 200,
+        "mag": 100,
+        "experience": 70,
+        "specials": [
+            {
+                "name": "Round The World Roundhouse Drop Kick",
+                "boost": "atk",
+                "amount": "50%"
+            }
+        ]
+    },
+    "rainbow-bunchie": {
+        "name": "Rainbow Bunchie",
+        "id": "final boss of the interwebs",
+        "img": "rainbow_bunchie.gif",
+        "hp": 3,
+        "mp": 3,
+        "atk": 3,
+        "def": 3,
+        "spd": 40,
+        "mag": 32,
+        "experience": -4,
+        "specials": [
+            {
+                "name": "Ditto Llama Trample",
+                "boost": "atk",
+                "amount": "50%"
+            }
+        ]
+    },
+    "jackie-chan": {
+        "name": "Jackie Chan",
+        "id": "chan",
+        "img": "chan.gif",
+        "hp": 20,
+        "mp": 10,
+        "atk": 18,
+        "def": 30,
+        "spd": 50,
+        "mag": 40,
+        "experience": 50,
+        "specials": [
+            {
+                "name": "A Can of Asian Persuasion",
+                "boost": "atk",
+                "amount": "50%"
+            }
+        ]
+    },
+    "trol-guy": {
+        "name": "Trol Guy",
+        "id": "trol",
+        "img": "trol.gif",
+        "hp": 7,
+        "mp": 7,
+        "atk": 3,
+        "def": 2,
+        "spd": 40,
+        "mag": 33,
+        "experience": -2,
+        "specials": [
+            {
+                "name": "Tralalol Song",
+                "boost": "atk",
+                "amount": "50%"
+            }
+        ]
+    },
+    "dragoon": {
+        "name": "Dragoon",
+        "id": "dragoon",
+        "img": "dragon_side_to_side.gif",
+        "hp": 34,
+        "mp": 20,
+        "atk": 10,
+        "def": 8,
+        "spd": 40,
+        "mag": 6,
+        "experience": 20,
+        "specials": [
+            {
+                "name": "Evade",
+                "boost": "atk",
+                "amount": "50%"
+            }
+        ]
+    },
+    "grumpy": {
+        "name": "Grumpy Cat",
+        "id": "grumpy",
+        "img": "grumpy-cat/grumpy_cat_stand.png",
+        "hp": 55,
+        "mp": 15,
+        "atk": 12,
+        "def": 4,
+        "spd": 40,
+        "mag": 6,
+        "experience": 100,
+        "specials": [
+            {
+                "name": "Evade",
+                "boost": "atk",
+                "amount": "50%"
+            }
+        ]
+    }
 }

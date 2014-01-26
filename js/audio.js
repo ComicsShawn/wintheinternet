@@ -2,16 +2,19 @@ var audiolist = {
 	//Themes
 	"battleTheme":chrome.extension.getURL("audio/themes/BattleLoopN.wav"),
 	"victory":chrome.extension.getURL("audio/themes/VictoryMusic.wav"),
+	"finalBoss":chrome.extension.getURL("audio/themes/MeowTheme.wav"),
 	//Battle Sound FX
 	"sword":chrome.extension.getURL("audio/fx/WTI-Sword-Hit2.wav"),
 	//Misc Sound Effects
+	"pit":chrome.extension.getURL("audio/fx/PitRumble.wav"),
 	"potion":chrome.extension.getURL("audio/fx/BurpN.wav"),
 	//Voices and Characters
 	//Heroes
 	//Enemies
 	"dragon":chrome.extension.getURL("audio/voices/DragonN.wav"),
 	"meow":chrome.extension.getURL("audio/voices/DaveMeowN.wav"),
-	"lemeow":chrome.extension.getURL("LeMeowN.wav")
+	"lemeow":chrome.extension.getURL("audio/voices/LeMeowN.wav"),
+	"lemeowecho":chrome.extension.getURL("audio/voices/LeMeowEcho.wav")
 	
 }
 
@@ -55,7 +58,10 @@ function createSource(file,w){
       	  if(request.type=="BG"){
       	  	  audioElementBG.setAttribute("src",audiolist[request.sound]);
 			  audioElementBG.load;
-			  audioElementBG.volume=.4;
+			  if(request.level==undefined)
+			  	  audioElementBG.volume=.4;
+			  else
+			  	  audioElementBG.volume=request.level;
 			  if(stopMusic.getAttribute("val")!=1)
 			  	  audioElementBG.play();
 		  }else if(request.type=="ALL"){

@@ -10,7 +10,28 @@ function startBattle(e,mdata){
 	console.log('BATTLE START');
 	console.log(mdata);
 	
-
+	/*if(mdata == "grumpy"){
+		mdata = {
+        "name": "Grumpy Cat",
+        "id": "grumpy",
+        "img": "grumpy-cat/grumpy_cat_stand.png",
+        "hp": 55,
+        "mp": 15,
+        "atk": 12,
+        "def": 4,
+        "spd": 40,
+        "mag": 6,
+        "experience": 100,
+        "specials": [
+            {
+                "name": "Evade",
+                "boost": "atk",
+                "amount": "50%"
+            }
+        ]
+        };
+	}
+*/
 	//let's make a battle system!
 	//hooray!
 	var bSystem, pData;
@@ -26,7 +47,10 @@ function startBattle(e,mdata){
 				//Hide all the goodies on the page
 				hideAll();
 				//Queue the tunes
-				playSound('BG','battleTheme');
+				if(mdata['name']=="Grumpy Cat")
+					playSound('BG','finalBoss');
+				else
+					playSound('BG','battleTheme');
 				//Load Arena
 				wb.html(data);
 				//Add Monster
@@ -212,6 +236,8 @@ function BattleSystem(mData, mArea, bDiv) {
 			saveStats();
 			BuildBattleOut();
 			stopSound('BG');
+			if($('#enemy').attr("rel")=="Dragon")
+				lastBoss();
 		});
 	}
 
@@ -245,7 +271,7 @@ function BattleSystem(mData, mArea, bDiv) {
 		//guard reset
 		this.extraMonsterData.guard = 1;
 		
-		if(selectedChoice < .5) {
+		if(selectedChoice > .2) {
 			me.mAttack();
 		} else {
 			me.mDefend();
@@ -255,8 +281,13 @@ function BattleSystem(mData, mArea, bDiv) {
 	}
 
 	this.mAttack = function() {
-		if($("#enemy").attr("rel")=="dragon")
+		var fear = Math.random();
+		if($("#enemy").attr("rel")=="Dragon")
 			playSound("FX","dragon");
+		if($("#enemy").attr("rel")=="Grumpy Cat")
+			if(fear<.5){ playSound("FX","meow"); }else {playSound("FX","lemeow"); }
+		
+		$("#action-area").addClass('rumble');
 		FlashBG();
 		move('action-area',-200, 200, -200,200);
 		var fullAttack = me.monsterData.atk + Math.floor( Math.random() * (me.monsterData.atk / 3));
@@ -267,6 +298,12 @@ function BattleSystem(mData, mArea, bDiv) {
 		CharHP(newHP);
 		me.messageArea.postBattleMethod("<div>"+ me.monsterData.name + " hits for a rad " + diff + " damage!</div>");
 		
+		if($("#enemy").attr("rel")=="Dragon" && fear < .3){
+			me.messageArea.postBattleMethod("<div>The Dragon's fierce power has left you shaking in fear!</div>")
+			setTimeout(function(){ $("#action-area").removeClass('rumble')},8500);
+		}else{
+			setTimeout(function(){ $("#action-area").removeClass('rumble')},500);
+		}
 	}
 
 	this.mDefend = function() {

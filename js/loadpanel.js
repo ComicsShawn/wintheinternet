@@ -34,7 +34,6 @@ function loadStats(){
         
         // Looks like this is the first initialization. Grab from JSON file
 		if(jQuery.isEmptyObject(player)){
-			alert("Loaded from File");
 			$.ajax({
 			  url: chrome.extension.getURL('data/player.json'),
 			  dataType: 'json',
@@ -125,12 +124,12 @@ function displayStats(player){
 		$("#charItem-"+i+" > button")
 			.prop("disabled",false)
 			.attr("id",player["items"][i]["id"])
-			.html("<img player-placement='"+p+"' player-original-title='"+player["items"][i]["name"]+"<br/>"+player["items"][i]["descrip"]+"' class='img-responsive tip' src='"+chrome.extension.getURL("img/items/"+player["items"][i]["image"])+"'/>");
+			.html("<img data-placement='"+p+"' data-original-title='"+player["items"][i]["name"]+"<br/>"+player["items"][i]["descrip"]+"' class='img-responsive tip' src='"+chrome.extension.getURL("img/items/"+player["items"][i]["image"])+"'/>");
 	}
 	//Bind Item Use
 	$('#characterItems .item').click(function(e){ useItem(e,$(this).attr('id'),$(this).parent('div').attr('rel')); });
 	//Initialize Tooltips
-	$('.tip').tooltip({html:true,container:'#wti_panel'});
+	$('.tip').tooltip({html:true});
 	
 	$("#character").attr('src',chrome.extension.getURL("img/sprites/"+pimg));
 	$("#avatar > img").attr('src',chrome.extension.getURL("img/sprites/"+pimg));	
@@ -147,12 +146,12 @@ function saveStats(){
 		player["mp"]=$("#cMP").html();
 		player["cb"]=$("#cCB").html();
 		
-		chrome.storage.sync.set({'player':player},function(){ alert("Progress Saved"); });
+		chrome.storage.sync.set({'player':player},function(){  });
     });
 }
 
 function destroyStats(){
-	var r=confirm("This will delete the data from local storage.  You Sure?");
+	var r=confirm("This will delete ALL data from local storage. Your character will be erased.  You Sure?");
 	if (r==true)
 	  {
 		chrome.storage.sync.clear();
@@ -226,7 +225,12 @@ function loadMonster(id,mood){
 		//Loaded x position
 		var mx = '120';
 		//Loaded y position
-		var my = '300';
+		if(data[id]=="dragon")
+			var my = '300';
+		else if(data[id]=="grumpy")
+			var my = '100';
+		else
+			var my = '1000';
 		//Monster img
 		var mi = "img/monsters/"+mdata['img'];
 		
@@ -235,14 +239,61 @@ function loadMonster(id,mood){
 		//Load monster image
 		$('#'+mid+' > a > img').attr("src",chrome.extension.getURL(mi));
 		
-console.log(mdata);
+		console.log(mdata);
 
 		//Position monster
 		var monster = $('#'+mid);
 		monster.css('top',my+'px').css('left',mx+'px');
 		animateMonster(monster);
 		monster.bind('click',function(e){ startBattle(e,mdata); });
+		
     });  
+}
+
+function lastBoss(){
+	playSound("BG","pit",1);
+	b.append("<div id='dialog'></div>");
+	b.append("<div id='pit' class='wti-hide'><img id='doompit' src=''><a id='eyecon' href='http://globalgamejam.org/2014/games/win-internet'><img src='' id='eyes'/><br/>Click to Meet<br/>Your Maker</a></div>");
+	$("#doompit").attr("src",chrome.extension.getURL("/img/locations/sinkhole.png"));
+	$("#eyes").attr("src",chrome.extension.getURL("img/monsters/grumpy-cat/EYEz.png"));
+	$("#eyecon").hide();
+	$.get(chrome.extension.getURL("com/dialog.html"), function(data){
+		$('#dialog').html(data);
+		var nxt = '<ul id="dialogTree" class="unstyled">';
+		nxt += '<li><em>Suddenly, the ground starts spinning beneath our hero as the Dragon\'s body turns to dust and blows away...</em></li>';
+		nxt += '<li><em>He turns and runs, fleeing the DOMs splintered cracks as if they were bony fingers grasping for him. He gets away in time, and looks back....</em></li>';
+		nxt += '<li><em>A cavernous pit invites him into it\'s icy darkness. Suddenly..... a voice calls to him....</em></li>';
+		nxt += '<li><em>.... is he brave enough to face what\'s next?</em></li>';
+		
+		nxt += '</ul>';
+		
+		count = 3;
+		$("#msgs").html(nxt);
+		$('#content').barrelRoll();
+		$("#dialog-next").click(function(e){
+			if(count==0){
+				$('#dialog').remove();
+			}else if(count==3){
+				e.preventDefault();
+				$("#pit").hide().removeClass("wti-hide").fadeIn(5000,function(){});
+				$("#dialogTree > li:first-child").animate({marginTop: '-=170px'});
+			}else if(count==2){
+				e.preventDefault();
+				$("#dialogTree > li:first-child").animate({marginTop: '-=170px'});
+				setTimeout(function(){ playSound("FX","lemeowecho"); },5000);
+			}else{
+				$('#eyecon').fadeIn(9000);
+				e.preventDefault();
+				$("#dialogTree > li:first-child").animate({marginTop: '-=170px'});
+				
+			}
+			count--;
+			if(count==1)
+				$(this).find('.fa').removeClass('fa-chevron-down').addClass('fa-times');
+		});	
+	});
+
+	
 }
 
 function loadQuest(name,d,p){
@@ -272,7 +323,7 @@ function loadQuest(name,d,p){
 			//Bind action buttons
 			$('.talk').click(function(e){ openDialog(e,name,quest); });
 			$('.knock').click(function(e){ $("#npc").attr("src",chrome.extension.getURL("quests/"+name+"/"+quest["npcpath"])).removeClass("wti-hide"); openDialog(e,name,quest); });
-	
+			$('.fight').click(function(e){ startBattle(e,"grumpy") });
 		});
 	  }, 
 	  error: function (data) {
@@ -532,6 +583,7 @@ function checkUrl(){
 		case 'octopusjuice.com':
 			loadQuest('sickjohnny',domain,pathname);
 			loadMonster('hornedelf');
+			loadMonster('rainbow-bunchie');
 			break;
 		case 'en.wikipedia.org':
 			if(pathname=="/wiki/Blue-ringed_octopus"){
@@ -541,9 +593,34 @@ function checkUrl(){
 			}
 			else{
 				loadMonster('hornedelf');
+				loadMonster('rainbow-bunchie');
+			}
+			break;
+		case 'globalgamejam.org':
+			if(pathname=="/2014/games/win-internet"){
+				//loadQuest('sickjohnny',domain,pathname);
+				loadMonster('grumpy');
+			}
+			else{
+				loadMonster('hornedelf');
+				loadMonster('rainbow-bunchie');
 			}
 			break;
 		default:
+			//Randomly place monsters
+			var random = Math.random();
+			if(random < .4)
+				loadMonster('hornedelf');
+			if(random < .1)
+				loadMonster('chuck-norris');
+			if(random > .5 && random < .8)
+				loadMonster('rainbow-bunchie');
+			if(random > .9)
+				loadMonster('jackie-chan');
+			if(random < .8)
+				loadMonster('trol-guy');
+			if(random > .4)
+				loadMonster('dragoon');
 			break;
 	}
 }
@@ -553,7 +630,7 @@ function bindActions(){
 	$('#wti-hop').click(function(e){
 		e.preventDefault();
 		$('#wti_panel').toggleClass("active");  
-		$('#iconrow .fa').toggleClass("fa-chevron-left fa-chevron-right");
+		$('#iconrow #wti-hop .fa').toggleClass("fa-chevron-left fa-chevron-right");
 	});
 	$('#wti-save').click(function(e){ e.preventDefault(); saveStats(); });
 	$('#wti-destroy').click(function(e){ e.preventDefault(); destroyStats(); });

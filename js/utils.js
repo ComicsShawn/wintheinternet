@@ -12,8 +12,8 @@
     };
 }(jQuery));
 
-function playSound(t,s) {
-  chrome.extension.sendMessage({action: "play",type:t,sound:s})
+function playSound(t,s,l) {
+  chrome.extension.sendMessage({action: "play",type:t,sound:s,level:l})
 }
 
 function stopSound(t) {
@@ -102,3 +102,23 @@ function calcSpeed(prev, next) {
     return speed;
 
 }
+
+(function($){
+    jQuery.fn.barrelRoll = function(){
+
+        var el = $(this),
+            speed = 2.5*Math.min(parseInt(el.height()), parseInt(el.width()))
+            tmpval = 0;
+
+            el.animate({'z-index': el.css('z-index')}, {duration: speed, queue:false, step:function(now,fx){
+                tmpval = Math.round(fx.pos*360)%360;
+                el.css({
+                    'transform': 'rotate('+tmpval+'deg)',
+                    '-moz-transform':'rotate('+tmpval+'deg)',
+                    '-webkit-transform': 'rotate('+tmpval+'deg)'
+                })
+            }})
+
+        return el
+    }
+})(jQuery)

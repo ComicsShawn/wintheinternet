@@ -64,7 +64,7 @@
 		{ 
 			"id":"stick",
 			"name":"Stick", 
-			"descrip": "Does nothing.  What do you want?  It&rsquo;s a stick.", 
+			"descrip": "Does nothing.<br/>It&rsquo;s a stick.", 
 			"image":"stick.png"
 		}
 	],

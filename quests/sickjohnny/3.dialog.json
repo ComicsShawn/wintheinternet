@@ -1,0 +1,26 @@
+[
+	{ 
+		"who":"Boss", 
+		"said":"Ma pateesa mi yatuka noleeya myo newpa bunky dunko."
+	},
+	{ 
+		"who":"You", 
+		"said":"... what?"
+	},
+	{ 
+		"who":"Boss", 
+		"said":"Sorry, hair ball.  What do you want?"
+	},
+	{ 
+		"who":"You", 
+		"said":"My friend is sick.  He needs octopus juice or something.  To be honest, I forgot what the plot was supposed to be."
+	},
+	{ 
+		"who":"Boss", 
+		"said":"Oh, Johnny?  Yeah, he lost to me in a saucer chugging contest.  What a newb.  I have your juice, here."
+	},
+	{
+		"who":"You",
+		"said":"Uh, thanks"
+	}
+]

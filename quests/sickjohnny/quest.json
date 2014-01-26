@@ -36,6 +36,17 @@
 					"imgpath":"redherring.gif",
 					"completeMSG":"What&rsquo;s the best resource for Blue Ringed Octopus?  Octopi?  Octupussi... never mind"
 				}
+		},
+		"globalgamejam.org":{
+			"/2014/games/win-internet": {                       
+					"number":3,
+					"type":"position",
+					"x":"25%",
+					"y":"30%",
+					"img":"grumpy",
+					"imgpath":"grumpy-cat/grumpy_cat_sit.png",
+					"completeMSG":"What&rsquo;s the best resource for Blue Ringed Octopus?  Octopi?  Octupussi... never mind"
+				}
 		}
 		
 	}
